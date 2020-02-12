@@ -1,0 +1,337 @@
+## TODO: Modularize the gitlab yaml to reuse templates
+
+## Define the stages & order of execution
+
+stages:
+    - CLUSTER-SETUP
+    - PROVIDER-INFRA-SETUP
+    - DIRECTOR-HEALTH-CHECK
+    - DIRECTOR-FUNCTIONALITY-CHECK
+    - OPENEBS-UPGRADE-CHECK
+    - CLUSTER-CLEANUP
+  
+  ## Setup the kubernetes cluster
+  cluster-create:
+    image: atulabhi/kops:v8
+    stage: CLUSTER-SETUP
+    script: 
+      - chmod 755 ./stages/1-cluster-setup/gcp
+      - ./stages/1-cluster-setup/gcp
+    artifacts:
+      when: always
+      paths:
+        - .kube/
+  
+  ## Deploy director-onprem
+  director-deploy:
+    image: atulabhi/kops:v8
+    stage: PROVIDER-INFRA-SETUP
+    dependencies:
+      - cluster-create
+    script: 
+     - chmod 755 ./stages/2-provider-infra-setup/infra-setup
+     - ./stages/2-provider-infra-setup/infra-setup
+    artifacts:
+      paths:
+        - .kube/
+  
+  ## director health check jobs
+  tcid-miot1x-maya-io-server-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+     - chmod 755 ./stages/3-director-sanity-check/maya-io-server-check
+     - ./stages/3-director-sanity-check/maya-io-server-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  maya-ui-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/maya-ui-check
+      - ./stages/3-director-sanity-check/maya-ui-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  tcid-blabb-od-elasticsearch-logging-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/od-elasticsearch-logging-check
+      - ./stages/3-director-sanity-check/od-elasticsearch-logging-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  od-kibana-logging-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/od-kibana-logging-check
+      - ./stages/3-director-sanity-check/od-kibana-logging-check
+    artifacts:
+      paths:
+        - .kube/
+        
+  table-manager-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/table-manager-check
+      - ./stages/3-director-sanity-check/table-manager-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  chat-server-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/chat-server-check
+      - ./stages/3-director-sanity-check/chat-server-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  cloud-agent-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/cloud-agent-check
+      - ./stages/3-director-sanity-check/cloud-agent-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  mysql-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/mysql-check
+      - ./stages/3-director-sanity-check/mysql-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  maya-grafana-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/maya-grafana-check
+      - ./stages/3-director-sanity-check/maya-grafana-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  memcached-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/memcached-check
+      - ./stages/3-director-sanity-check/memcached-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  ## cortex infrastructure components jobs
+  alertstore-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/alertstore-check
+      - ./stages/3-director-sanity-check/alertstore-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  alertstore-tablemanager-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/alertstore-tablemanager-check
+      - ./stages/3-director-sanity-check/alertstore-tablemanager-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  alertmanager-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/alertmanager-check
+      - ./stages/3-director-sanity-check/alertmanager-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  cassandra-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/cassandra-check
+      - ./stages/3-director-sanity-check/cassandra-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  distributor-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/distributor-check
+      - ./stages/3-director-sanity-check/distributor-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  ingestor-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/ingestor-check
+      - ./stages/3-director-sanity-check/ingestor-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  querier-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/querier-check
+      - ./stages/3-director-sanity-check/querier-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  ruler-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/ruler-check
+      - ./stages/3-director-sanity-check/ruler-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  configs-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/configs-check
+      - ./stages/3-director-sanity-check/configs-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  configs-db-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/configs-db-check
+      - ./stages/3-director-sanity-check/configs-db-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  ingress-nginx-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/ingress-nginx-check
+      - ./stages/3-director-sanity-check/ingress-nginx-check
+    artifacts:
+      paths:
+        - .kube/
+  
+  ## director functionality check jobs
+  cluster-connect-check:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-FUNCTIONALITY-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+     - chmod 755 ./stages/4-director-functionality-check/cluster-connect-check
+     - ./stages/4-director-functionality-check/cluster-connect-check
+    artifacts:
+      when: always
+      paths:
+        - .kube/
+        - .gcp/
+  
+  ## Openebs Upgrade Check
+  openebs-upgrade-check:
+    image: atulabhi/kops:v8
+    stage: OPENEBS-UPGRADE-CHECK
+    dependencies:
+      - cluster-connect-check
+    script: 
+      - chmod 755 ./stages/4-director-functionality-check/openebs-upgrade-check
+      - ./stages/4-director-functionality-check/openebs-upgrade-check
+  
+  ## cluster cleanup
+  cluster-cleanup:
+    when: always
+    image: atulabhi/kops:v8
+    dependencies:
+      - cluster-create
+    stage: CLUSTER-CLEANUP
+    script: 
+      - chmod 755 ./stages/5-cluster-cleanup/cluster-cleanup
+      - ./stages/5-cluster-cleanup/cluster-cleanup
+  
+  ## user cluster cleanup
+  user-cluster-cleanup:
+    when: always
+    image: atulabhi/kops:v8
+    dependencies:
+      - cluster-connect-check
+    stage: CLUSTER-CLEANUP
+    script: 
+      - chmod 755 ./stages/5-cluster-cleanup/user-cluster-cleanup
+      - ./stages/5-cluster-cleanup/user-cluster-cleanup
