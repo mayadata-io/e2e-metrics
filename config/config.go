@@ -39,21 +39,21 @@ const (
 	//
 	// NOTE:
 	//	tcid-miot1x-maya-io-server-check: is the yaml line where:
-	//	- tcid is a prefix
+	//	- tcid is the prefix
 	//	- miot1x is the tcid value
 	//	- maya-io-server-check is the testcase name
 	ActualTestCaseNameDelimiter string = "-"
 
 	// DesiredTestCaseNamePrefix refers to the prefix associated with
 	// every test case name
-	DesiredTestCaseNamePrefix string = "tcid:"
+	DesiredTestCaseNamePrefix string = "- tcid:"
 
 	// DesiredTestCaseNameDelimiter is the delimiter used to separate
 	// the testcase name from its prefix & test case id value
 	//
 	// NOTE:
 	//	tcid: miot1x is the yaml line where:
-	//	- tcid is the field
+	//	- tcid is the prefix
 	//	- miot1x is the tcid value
 	DesiredTestCaseNameDelimiter string = ": "
 )
@@ -80,13 +80,25 @@ type Config struct {
 func New(path string) *Config {
 	return &Config{
 		Path:                     path,
-		DesiredTestCasesFileName: "master-ci.yml",
+		DesiredTestCasesFileName: ".master-plan.yml",
 		ActualTestCasesFileName:  ".gitlab-ci.yml",
 	}
 }
 
-// Load loads all metac config files & converts them
-// to unstructured instances
+// LoadOrEmpty loads all config files if available or
+// returns empty config along with load error
+func (c *Config) LoadOrEmpty() (*MetricsConfig, error) {
+	mc, err := c.Load()
+	if err != nil {
+		mc = &MetricsConfig{
+			DesiredTestCases: map[string]bool{},
+			ActualTestCases:  map[string]bool{},
+		}
+	}
+	return mc, err
+}
+
+// Load loads all config files or load error
 func (c *Config) Load() (*MetricsConfig, error) {
 	glog.V(3).Infof("Will load config(s) from path %q", c.Path)
 
@@ -110,7 +122,7 @@ func (c *Config) Load() (*MetricsConfig, error) {
 		if strings.HasPrefix(lineContent, ActualTestCaseNamePrefix) {
 			words := strings.Split(lineContent, ActualTestCaseNameDelimiter)
 			if len(words) > 2 {
-				tcid := words[1]
+				tcid := strings.TrimSpace(words[1])
 				glog.V(2).Infof("Adding actual tcid %q", tcid)
 				out.ActualTestCases[tcid] = true
 			}
@@ -121,8 +133,8 @@ func (c *Config) Load() (*MetricsConfig, error) {
 		lineContent = strings.TrimSpace(lineContent)
 		if strings.HasPrefix(lineContent, DesiredTestCaseNamePrefix) {
 			words := strings.Split(lineContent, DesiredTestCaseNameDelimiter)
-			if len(words) == 2 {
-				tcid := words[1]
+			if len(words) >= 2 {
+				tcid := strings.TrimSpace(words[1])
 				glog.V(2).Infof("Adding desired tcid %q", tcid)
 				out.DesiredTestCases[tcid] = true
 			}
