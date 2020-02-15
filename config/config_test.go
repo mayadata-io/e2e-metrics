@@ -21,7 +21,9 @@ import (
 )
 
 func TestConfigLoad(t *testing.T) {
-	var expectDesiredTestNames = []string{}
+	var expectDesiredTestNames = []string{
+		"miot1x", "miot2x",
+	}
 	var expectActualTestNames = []string{
 		"miot1x", "blabb",
 	}

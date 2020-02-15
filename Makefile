@@ -28,11 +28,13 @@ vendor: go.mod go.sum
 	@GO111MODULE=on go mod tidy
 	@GO111MODULE=on go mod vendor
 
-# To test using verbose logging
-# @go test ./... -v -args --logtostderr -v=4
 .PHONY: test
 test: 
 	@go test ./...
+
+.PHONY: testv
+testv:
+	@go test ./... -v -args --logtostderr -v=2
 
 .PHONY: image
 image:
