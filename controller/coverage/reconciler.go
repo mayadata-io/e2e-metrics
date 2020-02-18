@@ -259,10 +259,20 @@ func (r *Reconciler) getDesiredPipelineCoverage() *unstructured.Unstructured {
 				"id": os.Getenv("E2E_METRICS_PIPELINE_ID"),
 			},
 			"test": map[string]interface{}{
-				"count": len(r.metrics.DesiredTestCases),
+				"count": int64(len(r.metrics.DesiredTestCases)),
 			},
 		},
-		"status": map[string]interface{}{
+		// since metac does not sync the attachment's status
+		// we are renaming status -> result
+		//
+		// NOTE:
+		//	metac does not reconcile status since it can lead
+		// to hot loop reconciliations. Once metac exposes a
+		// new tunable or starts supporting reconcilining
+		// attachment's status, we may rename result -> status.
+		//
+		// ref - https://github.com/AmitKumarDas/metac/issues/100
+		"result": map[string]interface{}{
 			"phase":            r.getPhase(),
 			"reason":           r.getErrOrEmpty(),
 			"warning":          r.getWarnOrEmpty(),

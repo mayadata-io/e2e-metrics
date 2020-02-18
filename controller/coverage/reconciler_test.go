@@ -320,10 +320,10 @@ func TestReconcilerReconcile(t *testing.T) {
 							"id": "",
 						},
 						"test": map[string]interface{}{
-							"count": 0,
+							"count": int64(0),
 						},
 					},
-					"status": map[string]interface{}{
+					"result": map[string]interface{}{
 						"phase":            "Failed",
 						"reason":           "open /etc/config/e2e-metrics/: no such file or directory",
 						"warning":          "",
@@ -370,10 +370,10 @@ func TestReconcilerGetDesiredPipelineCoverage(t *testing.T) {
 							"id": "",
 						},
 						"test": map[string]interface{}{
-							"count": 0,
+							"count": int64(0),
 						},
 					},
-					"status": map[string]interface{}{
+					"result": map[string]interface{}{
 						"phase":            "Passed",
 						"reason":           "",
 						"warning":          "",

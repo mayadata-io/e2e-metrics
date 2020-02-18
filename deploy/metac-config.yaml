@@ -8,6 +8,9 @@ spec:
   watch:
     apiVersion: v1
     resource: namespaces
+    nameSelector:
+      # we are interested in e2e-metrics namespace only
+      - e2e-metrics
   attachments:
   - apiVersion: e2e-metrics.mayadata.io/v1alpha1
     resource: pipelinecoverages
