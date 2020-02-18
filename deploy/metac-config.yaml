@@ -1,0 +1,20 @@
+apiVersion: metac.openebs.io/v1alpha1
+kind: GenericController
+metadata:
+  name: sync-namespace
+  namespace: e2e
+spec:
+  updateAny: true
+  watch:
+    apiVersion: v1
+    resource: namespaces
+  attachments:
+  - apiVersion: e2e-metrics.mayadata.io/v1alpha1
+    resource: pipelinecoverages
+    updateStrategy:
+      method: InPlace
+  hooks:
+    sync:
+      inline:
+        funcName: sync/pipelinecoverage
+---
