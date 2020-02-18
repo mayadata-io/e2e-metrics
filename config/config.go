@@ -117,25 +117,25 @@ func (c *Config) Load() (*MetricsConfig, error) {
 	}
 
 	setActualTestCaseName := func(lineContent string) {
-		glog.V(4).Infof("Actual: Received %q", lineContent)
+		glog.V(6).Infof("Actual: Received %q", lineContent)
 		lineContent = strings.TrimSpace(lineContent)
 		if strings.HasPrefix(lineContent, ActualTestCaseNamePrefix) {
 			words := strings.Split(lineContent, ActualTestCaseNameDelimiter)
 			if len(words) > 2 {
 				tcid := strings.TrimSpace(words[1])
-				glog.V(2).Infof("Adding actual tcid %q", tcid)
+				glog.V(3).Infof("Adding actual tcid %q", tcid)
 				out.ActualTestCases[tcid] = true
 			}
 		}
 	}
 	setDesiredTestCaseName := func(lineContent string) {
-		glog.V(4).Infof("Desired: Received %q", lineContent)
+		glog.V(6).Infof("Desired: Received %q", lineContent)
 		lineContent = strings.TrimSpace(lineContent)
 		if strings.HasPrefix(lineContent, DesiredTestCaseNamePrefix) {
 			words := strings.Split(lineContent, DesiredTestCaseNameDelimiter)
 			if len(words) >= 2 {
 				tcid := strings.TrimSpace(words[1])
-				glog.V(2).Infof("Adding desired tcid %q", tcid)
+				glog.V(3).Infof("Adding desired tcid %q", tcid)
 				out.DesiredTestCases[tcid] = true
 			}
 		}
@@ -152,14 +152,14 @@ func (c *Config) Load() (*MetricsConfig, error) {
 	for _, file := range files {
 		fileName := file.Name()
 		if file.IsDir() || file.Mode().IsDir() {
-			glog.V(3).Infof(
+			glog.V(4).Infof(
 				"Will skip config %q at path %q: Not a file", fileName, c.Path,
 			)
 			// we don't load folder(s)
 			continue
 		}
 		if !strings.HasSuffix(fileName, ".yaml") && !strings.HasSuffix(fileName, ".yml") {
-			glog.V(3).Infof(
+			glog.V(4).Infof(
 				"Will skip config %q at path %q: Not a yaml file", fileName, c.Path,
 			)
 			// we support only yaml files
@@ -168,7 +168,7 @@ func (c *Config) Load() (*MetricsConfig, error) {
 		// get appropriate setter function
 		setTestCaseNamesByLine := setTestCaseName(fileName)
 		if setTestCaseNamesByLine == nil {
-			glog.V(3).Infof(
+			glog.V(4).Infof(
 				"Will skip config %q at path %q: Want %q or %q",
 				fileName, c.Path, c.DesiredTestCasesFileName, c.ActualTestCasesFileName,
 			)

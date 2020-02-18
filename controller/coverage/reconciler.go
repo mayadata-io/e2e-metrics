@@ -177,7 +177,8 @@ func (r *Reconciler) getWarnOrEmpty() string {
 	if len(r.warnings) == 0 {
 		return ""
 	}
-	return fmt.Sprintf("%s", strings.Join(r.warnings, ","))
+	wcount := fmt.Sprintf("%d warnings", len(r.warnings))
+	return fmt.Sprintf("%s: %s", wcount, strings.Join(r.warnings, ": "))
 }
 
 // calculateCoverage has the real business logic of calculating
@@ -185,8 +186,8 @@ func (r *Reconciler) getWarnOrEmpty() string {
 func (r *Reconciler) calculateCoverage() {
 	for tcid := range r.metrics.ActualTestCases {
 		if r.metrics.DesiredTestCases[tcid] {
-			// consider those actual test case(s) that are
-			// registered in desired
+			// the gitlab-ci.yml test case(s) that are registered
+			// in .master-plan.yml are valid
 			r.validTests = append(r.validTests, tcid)
 		} else {
 			r.invalidTests = append(r.invalidTests, tcid)
@@ -195,17 +196,14 @@ func (r *Reconciler) calculateCoverage() {
 	if len(r.invalidTests) > 0 {
 		r.warnings = append(
 			r.warnings,
-			fmt.Sprintf("Invalid tests found: %s", strings.Join(r.invalidTests, ",")),
+			fmt.Sprintf("Invalid tests [%s]", strings.Join(r.invalidTests, ",")),
 		)
 	}
 
 	validTestCount := len(r.validTests)
 	desiredTestCount := len(r.metrics.DesiredTestCases)
 	if desiredTestCount == 0 {
-		r.warnings = append(
-			r.warnings,
-			fmt.Sprintf("No desired test cases found"),
-		)
+		r.warnings = append(r.warnings, fmt.Sprintf("Missing desired tests"))
 		// return to avoid divide-by-0 error
 		return
 	}
@@ -277,8 +275,8 @@ func (r *Reconciler) getDesiredPipelineCoverage() *unstructured.Unstructured {
 			"reason":           r.getErrOrEmpty(),
 			"warning":          r.getWarnOrEmpty(),
 			"runid":            os.Getenv("E2E_METRICS_RUN_ID"),
-			"validTestCount":   len(r.validTests),
-			"invalidTestCount": len(r.invalidTests),
+			"validTestCount":   int64(len(r.validTests)),
+			"invalidTestCount": int64(len(r.invalidTests)),
 			"coverage":         Percentage(r.coverage).String(),
 		},
 	})
