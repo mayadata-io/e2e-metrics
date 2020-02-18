@@ -35,16 +35,21 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: E2E_METRICS_PIPELINE_ID
-          value: "gcp-101"
+          value: "gcp-101" # change as per env
         - name: E2E_METRICS_COVERAGE_NAME
-          value: "oep-e2e-gcp-coverage"
+          value: "oep-e2e-gcp-coverage" # change as per env
         - name: E2E_METRICS_RUN_ID
-          value: "run-111"
+          value: "run-101" # change as per env
         volumeMounts:
-        - name: config
+        - name: metac
           mountPath: /etc/config/metac
+        - name: metrics
+          mountPath: /etc/config/e2e-metrics
       volumes:
-      - name: config
+      - name: metac
         configMap:
           name: metac-config-test
+      - name: metrics
+        configMap:
+          name: metrics-config-test
 ---
