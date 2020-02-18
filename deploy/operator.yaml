@@ -1,0 +1,39 @@
+---
+# This StatefulSet deploys e2e-metrics controller
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.mayadata.io/name: e2e-metrics
+  name: e2e-metrics
+  namespace: e2e-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.mayadata.io/name: e2e-metrics
+  serviceName: ""
+  template:
+    metadata:
+      labels:
+        app.mayadata.io/name: e2e-metrics
+    spec:
+      serviceAccountName: e2e-metrics
+      containers:
+      - name: e2e-metrics
+        image: quay.io/amitkumardas/e2e-metrics:latest
+        command: ["/usr/bin/e2e-metrics"]
+        args:
+        - --logtostderr
+        - --run-as-local
+        - -v=5
+        - --discovery-interval=40s
+        - --cache-flush-interval=240s
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config/metac
+      volumes:
+      - name: config
+        configMap:
+          name: metac-config-test
+---
