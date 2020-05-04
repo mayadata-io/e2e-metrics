@@ -106,8 +106,8 @@ func Sync(request *generic.SyncHookRequest, response *generic.SyncHookResponse) 
 			attachment.GetNamespace() == podNS {
 			observedCoverage = attachment
 		} else {
-			// add un required attachments to response
-			// metac in turn ignores them
+			// Add un required attachments to response.
+			// Metac in turn ignores them
 			response.Attachments = append(response.Attachments, attachment)
 		}
 	}

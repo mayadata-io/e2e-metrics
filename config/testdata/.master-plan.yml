@@ -4,14 +4,21 @@ metadata:
   name: gitlab-testCases
 spec:
   tests:
-  - tcid: miot1x
+  - tcid: TCID-DIR-INSTALL-ON-LOCAL-PV
     name: Install on a Onprem Cluster
     description: Test the components are installed properly using both backend and Director apis. Check from the status from status agent response for the OpenEBS components.
     labels:
       test/group: Install and Upgrade of OpenEBS
       test/type: Install OpenEBS API Server
       git/location: https://github.com/mayadata-io/oep-e2e-gcp
-  - tcid: miot2x
+  - tcid: TCID-DIR-HEALTH-CHECK-V2
+    name: Install on a Onprem Cluster
+    description: Test the components are installed properly using both backend and Director apis. Check from the status from status agent response for the OpenEBS components.
+    labels:
+      test/group: Install and Upgrade of OpenEBS
+      test/type: Install OpenEBS API Server
+      git/location: https://github.com/mayadata-io/oep-e2e-gcp
+  - tcid: TCID-DIR-HEALTH-CHECK
     name: Install on a K8S Cluster connected to Onprem Cluster
     description: blah blah blah
     labels:

@@ -36,7 +36,7 @@ stages:
         - .kube/
   
   ## director health check jobs
-  tcid-miot1x-maya-io-server-check:
+  TCID-DIR-HEALTH-CHECK:
     image: atulabhi/kops:v8
     stage: DIRECTOR-HEALTH-CHECK
     dependencies:
@@ -60,7 +60,7 @@ stages:
       paths:
         - .kube/
   
-  tcid-blabb-od-elasticsearch-logging-check:
+  TCID-DIR-HEALTH-CHECK-V2:
     image: atulabhi/kops:v8
     stage: DIRECTOR-HEALTH-CHECK
     dependencies:
