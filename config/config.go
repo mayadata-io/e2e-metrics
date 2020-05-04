@@ -31,7 +31,11 @@ import (
 const (
 	// ActualTestCaseNamePrefix refers to the prefix associated with
 	// every test case name
-	ActualTestCaseNamePrefix string = "tcid-"
+	//
+	// NOTE:
+	//	Actual test cases are ones whose testcases are found at
+	// .gitlab-ci.yml
+	ActualTestCaseNamePrefix string = "TCID-"
 
 	// ActualTestCaseNameDelimiter is the delimiter used to separate
 	// the testcase name from its prefix & test case id value & actual
@@ -46,6 +50,10 @@ const (
 
 	// DesiredTestCaseNamePrefix refers to the prefix associated with
 	// every test case name
+	//
+	// NOTE:
+	//	Desired test cases are ones whose testcases are found at
+	// .master-plan.yml
 	DesiredTestCaseNamePrefix string = "- tcid:"
 
 	// DesiredTestCaseNameDelimiter is the delimiter used to separate
@@ -116,81 +124,96 @@ func (c *Config) Load() (*MetricsConfig, error) {
 		ActualTestCases:  map[string]bool{},
 	}
 
-	setActualTestCaseName := func(lineContent string) {
+	registerActualTestCaseNamesFn := func(lineContent string) {
 		glog.V(6).Infof("Actual: Received %q", lineContent)
 		lineContent = strings.TrimSpace(lineContent)
 		if strings.HasPrefix(lineContent, ActualTestCaseNamePrefix) {
-			words := strings.Split(lineContent, ActualTestCaseNameDelimiter)
-			if len(words) > 2 {
-				tcid := strings.TrimSpace(words[1])
-				glog.V(3).Infof("Adding actual tcid %q", tcid)
-				out.ActualTestCases[tcid] = true
-			}
+			tcid := strings.TrimSuffix(lineContent, ":")
+			glog.V(3).Infof("Registering actual tcid %q", tcid)
+			out.ActualTestCases[tcid] = true
 		}
 	}
-	setDesiredTestCaseName := func(lineContent string) {
+	registerDesiredTestCaseNamesFn := func(lineContent string) {
 		glog.V(6).Infof("Desired: Received %q", lineContent)
 		lineContent = strings.TrimSpace(lineContent)
 		if strings.HasPrefix(lineContent, DesiredTestCaseNamePrefix) {
 			words := strings.Split(lineContent, DesiredTestCaseNameDelimiter)
-			if len(words) >= 2 {
+			if len(words) == 2 {
 				tcid := strings.TrimSpace(words[1])
-				glog.V(3).Infof("Adding desired tcid %q", tcid)
+				glog.V(3).Infof("Registering desired tcid %q", tcid)
 				out.DesiredTestCases[tcid] = true
 			}
 		}
 	}
-	setTestCaseName := func(filename string) func(string) {
-		if c.ActualTestCasesFileName == filename {
-			return setActualTestCaseName
-		} else if c.DesiredTestCasesFileName == filename {
-			return setDesiredTestCaseName
+	// we support e2e metrics yaml files only
+	getRegisterTestCaseNamesFuncForFileName :=
+		func(filename string) func(string) {
+			if filename == c.ActualTestCasesFileName {
+				return registerActualTestCaseNamesFn
+			} else if filename == c.DesiredTestCasesFileName {
+				return registerDesiredTestCaseNamesFn
+			}
+			return nil
 		}
-		return nil
-	}
-	// there will be multiple config files i.e. desired & actual
+	// there will be multiple config files i.e. desired & actual test
+	// case files in one location
 	for _, file := range files {
 		fileName := file.Name()
 		if file.IsDir() || file.Mode().IsDir() {
 			glog.V(4).Infof(
-				"Will skip config %q at path %q: Not a file", fileName, c.Path,
+				"Will skip config %q at path %q: Not a file",
+				fileName,
+				c.Path,
 			)
 			// we don't load folder(s)
 			continue
 		}
-		if !strings.HasSuffix(fileName, ".yaml") && !strings.HasSuffix(fileName, ".yml") {
+		if !strings.HasSuffix(fileName, ".yaml") &&
+			!strings.HasSuffix(fileName, ".yml") {
 			glog.V(4).Infof(
-				"Will skip config %q at path %q: Not a yaml file", fileName, c.Path,
+				"Will skip config %q at path %q: Not a yaml file",
+				fileName,
+				c.Path,
 			)
 			// we support only yaml files
 			continue
 		}
-		// get appropriate setter function
-		setTestCaseNamesByLine := setTestCaseName(fileName)
-		if setTestCaseNamesByLine == nil {
+		// get registry logic that registers all the test cases
+		// found in this file based on the name of this file
+		registerTestCaseNames := getRegisterTestCaseNamesFuncForFileName(fileName)
+		if registerTestCaseNames == nil {
 			glog.V(4).Infof(
 				"Will skip config %q at path %q: Want %q or %q",
-				fileName, c.Path, c.DesiredTestCasesFileName, c.ActualTestCasesFileName,
+				fileName,
+				c.Path,
+				c.DesiredTestCasesFileName,
+				c.ActualTestCasesFileName,
 			)
-			// we support only e2e metrics yaml files
 			continue
 		}
 		// build full file path
 		fileNameWithPath := c.Path + fileName
 		glog.V(2).Infof("Will load config %q", fileNameWithPath)
 
-		// real logic to load test case names
-		err := processFileByLine(fileNameWithPath, setTestCaseNamesByLine)
+		// logic that parses the file & registers the test case names
+		// found in this file
+		err := parseFileByLine(fileNameWithPath, registerTestCaseNames)
 		if err != nil {
-			return nil, errors.Wrapf(err, "Failed to load %q", fileNameWithPath)
+			return nil, errors.Wrapf(
+				err,
+				"Failed to parse %q",
+				fileNameWithPath,
+			)
 		}
 	}
 	glog.V(4).Infof("Config(s) loaded successfully from path %q", c.Path)
 	return out, nil
 }
 
-func processFileByLine(filename string, process func(string)) (err error) {
-	glog.V(3).Infof("Will process file %q", filename)
+// processFileByLine parses the given file using
+// the provided parse logic
+func parseFileByLine(filename string, process func(string)) (err error) {
+	glog.V(3).Infof("Will parse file %q", filename)
 	file, err := os.Open(filename)
 	defer file.Close()
 	if err != nil {
@@ -235,6 +258,6 @@ func processFileByLine(filename string, process func(string)) (err error) {
 	if err != io.EOF {
 		return err
 	}
-	glog.V(4).Infof("Successfully processed file %q", filename)
+	glog.V(4).Infof("Parsed file %q successfully", filename)
 	return nil
 }

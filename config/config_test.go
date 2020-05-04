@@ -22,10 +22,13 @@ import (
 
 func TestConfigLoad(t *testing.T) {
 	var expectDesiredTestNames = []string{
-		"miot1x", "miot2x",
+		"TCID-DIR-INSTALL-ON-LOCAL-PV",
+		"TCID-DIR-HEALTH-CHECK-V2",
+		"TCID-DIR-HEALTH-CHECK",
 	}
 	var expectActualTestNames = []string{
-		"miot1x", "blabb",
+		"TCID-DIR-HEALTH-CHECK-V2",
+		"TCID-DIR-HEALTH-CHECK",
 	}
 
 	config := New("testdata/")
@@ -36,28 +39,34 @@ func TestConfigLoad(t *testing.T) {
 	// Desired
 	if len(metrics.DesiredTestCases) != len(expectDesiredTestNames) {
 		t.Fatalf(
-			"Expected desired test case count %d got %d",
-			len(expectDesiredTestNames), len(metrics.DesiredTestCases),
+			"Expected desired test case count %d got %d: %+v",
+			len(expectDesiredTestNames),
+			len(metrics.DesiredTestCases),
+			metrics.DesiredTestCases,
 		)
 	}
 	for _, eDesiredTestName := range expectDesiredTestNames {
 		if !metrics.DesiredTestCases[eDesiredTestName] {
-			t.Fatalf("Expected desired test name %q got %+v",
-				eDesiredTestName, metrics.DesiredTestCases,
+			t.Fatalf("Expected desired test name %q got %#v",
+				eDesiredTestName,
+				metrics.DesiredTestCases,
 			)
 		}
 	}
 	// Actuals
 	if len(metrics.ActualTestCases) != len(expectActualTestNames) {
 		t.Fatalf(
-			"Expected actual test case count %d got %d",
-			len(expectActualTestNames), len(metrics.ActualTestCases),
+			"Expected actual test case count %d got %d: %+v",
+			len(expectActualTestNames),
+			len(metrics.ActualTestCases),
+			metrics.ActualTestCases,
 		)
 	}
 	for _, eActualTestName := range expectActualTestNames {
 		if !metrics.ActualTestCases[eActualTestName] {
 			t.Fatalf("Expected actual test name %q got %#v",
-				eActualTestName, metrics.ActualTestCases,
+				eActualTestName,
+				metrics.ActualTestCases,
 			)
 		}
 	}
