@@ -21,7 +21,7 @@ spec:
       serviceAccountName: e2e-metrics
       containers:
       - name: e2e-metrics
-        image: mayadataio/e2e-metrics
+        image: mayadataio/e2e-metrics:ci
         command: ["/usr/bin/e2e-metrics"]
         args:
         - --logtostderr
