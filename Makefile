@@ -4,8 +4,8 @@ OS = $(shell uname)
 
 ALL_SRC = $(shell find . -name "*.go" | grep -v -e "vendor")
 
-PACKAGE_VERSION ?= latest
-REGISTRY ?= quay.io/amitkumardas
+PACKAGE_VERSION ?= ci
+REGISTRY ?= mayadataio
 IMG_NAME ?= e2e-metrics
 
 all: bins
