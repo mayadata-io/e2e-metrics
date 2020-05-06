@@ -29,6 +29,10 @@ import (
 )
 
 const (
+	// DeprecatedTestCaseIDPrefix refers to the deprecated prefix
+	// associated with test case ids.
+	DeprecatedTestCaseIDPrefix string = "tcid-"
+
 	// ActualTestCaseNamePrefix refers to the prefix associated with
 	// every test case name
 	//
@@ -69,8 +73,9 @@ const (
 // MetricsConfig has required details on actual vs. desired
 // e2e test cases
 type MetricsConfig struct {
-	DesiredTestCases map[string]bool
-	ActualTestCases  map[string]bool
+	DesiredTestCases    map[string]bool
+	ActualTestCases     map[string]bool
+	DeprecatedTestCases []string
 }
 
 // Config is the path to the config files
@@ -131,6 +136,13 @@ func (c *Config) Load() (*MetricsConfig, error) {
 			tcid := strings.TrimSuffix(lineContent, ":")
 			glog.V(3).Infof("Registering actual tcid %q", tcid)
 			out.ActualTestCases[tcid] = true
+		} else if strings.HasPrefix(lineContent, DeprecatedTestCaseIDPrefix) {
+			tcid := strings.TrimSuffix(lineContent, ":")
+			glog.V(3).Infof("Registering deprecated tcid %q", tcid)
+			out.DeprecatedTestCases = append(
+				out.DeprecatedTestCases,
+				tcid,
+			)
 		}
 	}
 	registerDesiredTestCaseNamesFn := func(lineContent string) {

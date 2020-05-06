@@ -30,6 +30,10 @@ func TestConfigLoad(t *testing.T) {
 		"TCID-DIR-HEALTH-CHECK-V2",
 		"TCID-DIR-HEALTH-CHECK",
 	}
+	var expectDeprecatedTestNames = []string{
+		"tcid-dir-health-check-v2",
+		"tcid-DIR-HEALTH-CHECK",
+	}
 
 	config := New("testdata/")
 	metrics, err := config.Load()
@@ -67,6 +71,29 @@ func TestConfigLoad(t *testing.T) {
 			t.Fatalf("Expected actual test name %q got %#v",
 				eActualTestName,
 				metrics.ActualTestCases,
+			)
+		}
+	}
+	// Deprecated
+	if len(metrics.DeprecatedTestCases) != len(expectDeprecatedTestNames) {
+		t.Fatalf(
+			"Expected deprecated test case count %d got %d: %+v",
+			len(expectDeprecatedTestNames),
+			len(metrics.DeprecatedTestCases),
+			metrics.DeprecatedTestCases,
+		)
+	}
+	for _, eDeprecatedTestName := range expectDeprecatedTestNames {
+		var found bool
+		for _, gotDeprecatedTestName := range metrics.DeprecatedTestCases {
+			if eDeprecatedTestName == gotDeprecatedTestName {
+				found = true
+			}
+		}
+		if !found {
+			t.Fatalf("Expected deprecated test name %q got %#v",
+				eDeprecatedTestName,
+				metrics.DeprecatedTestCases,
 			)
 		}
 	}

@@ -181,6 +181,21 @@ func (r *Reconciler) getWarnOrEmpty() string {
 	return fmt.Sprintf("%s: %s", wcount, strings.Join(r.warnings, ": "))
 }
 
+func (r *Reconciler) getDeprecatedOrEmpty() string {
+	if len(r.metrics.DeprecatedTestCases) == 0 {
+		return ""
+	}
+	dcount := fmt.Sprintf(
+		"%d deprecations",
+		len(r.metrics.DeprecatedTestCases),
+	)
+	return fmt.Sprintf(
+		"%s: %s",
+		dcount,
+		strings.Join(r.metrics.DeprecatedTestCases, ": "),
+	)
+}
+
 // calculateCoverage has the real business logic of calculating
 // test coverage percentage including setting warnings if any
 func (r *Reconciler) calculateCoverage() {
@@ -274,6 +289,7 @@ func (r *Reconciler) getDesiredPipelineCoverage() *unstructured.Unstructured {
 			"phase":            r.getPhase(),
 			"reason":           r.getErrOrEmpty(),
 			"warning":          r.getWarnOrEmpty(),
+			"deprecated":       r.getDeprecatedOrEmpty(),
 			"runid":            os.Getenv("E2E_METRICS_RUN_ID"),
 			"validTestCount":   int64(len(r.validTests)),
 			"invalidTestCount": int64(len(r.invalidTests)),

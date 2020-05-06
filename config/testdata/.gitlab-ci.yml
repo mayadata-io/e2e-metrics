@@ -47,6 +47,18 @@ stages:
     artifacts:
       paths:
         - .kube/
+
+  tcid-DIR-HEALTH-CHECK:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+     - chmod 755 ./stages/3-director-sanity-check/maya-io-server-check
+     - ./stages/3-director-sanity-check/maya-io-server-check
+    artifacts:
+      paths:
+        - .kube/
   
   maya-ui-check:
     image: atulabhi/kops:v8
@@ -61,6 +73,18 @@ stages:
         - .kube/
   
   TCID-DIR-HEALTH-CHECK-V2:
+    image: atulabhi/kops:v8
+    stage: DIRECTOR-HEALTH-CHECK
+    dependencies:
+      - director-deploy
+    script: 
+      - chmod 755 ./stages/3-director-sanity-check/od-elasticsearch-logging-check
+      - ./stages/3-director-sanity-check/od-elasticsearch-logging-check
+    artifacts:
+      paths:
+        - .kube/
+
+  tcid-dir-health-check-v2:
     image: atulabhi/kops:v8
     stage: DIRECTOR-HEALTH-CHECK
     dependencies:
