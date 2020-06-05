@@ -211,7 +211,11 @@ func (r *Reconciler) calculateCoverage() {
 	if len(r.invalidTests) > 0 {
 		r.warnings = append(
 			r.warnings,
-			fmt.Sprintf("Invalid tests [%s]", strings.Join(r.invalidTests, ",")),
+			fmt.Sprintf(
+				"%d invalid tests were found [%s]",
+				len(r.invalidTests),
+				strings.Join(r.invalidTests, ", "),
+			),
 		)
 	}
 
