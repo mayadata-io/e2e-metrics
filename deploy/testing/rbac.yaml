@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prom-grafana
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prom-grafana
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - "*"
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prom-grafana
+subjects:
+- kind: ServiceAccount
+  name: prom-grafana
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: prom-grafana
+  apiGroup: rbac.authorization.k8s.io
+---

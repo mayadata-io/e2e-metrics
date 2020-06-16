@@ -57,6 +57,7 @@ COPY config/ config/
 COPY controller/ controller/
 COPY pkg/ pkg/
 COPY types/ types/
+COPY metrics/ metrics/
 
 # we run the test once again since this is one of the
 # ways to remind copying new source packages into this 

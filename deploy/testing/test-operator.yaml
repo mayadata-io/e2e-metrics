@@ -1,5 +1,7 @@
 ---
 # This StatefulSet deploys e2e-metrics controller
+# This makes use of configmaps loaded with test yaml
+# files that are useful for testing purposes only.
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -21,7 +23,8 @@ spec:
       serviceAccountName: e2e-metrics
       containers:
       - name: e2e-metrics
-        image: mayadataio/e2e-metrics:ci
+        image: amitnist/e2e-metrics:ci
+        imagePullPolicy: Always
         command: ["/usr/bin/e2e-metrics"]
         args:
         - --logtostderr

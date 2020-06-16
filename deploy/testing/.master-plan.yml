@@ -1,0 +1,1036 @@
+kind: MasterPlan
+apiVersion: e2e.mayadata.io/v1alpha1
+metadata:
+  name: oep-e2e-master-testplan
+spec:
+  tests:
+  # --------------------------------------------------
+  # https://e2e.mayadata.io/docs/director/installation/installation
+  # --------------------------------------------------
+  - tcid: TCID-DIR-INSTALL-ON-LOCAL-DEV
+    name: "TCID-DIR-INSTALL-ON-LOCAL-DEV"
+    description: "Test Director Install on local device"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, INSTALL, LOCAL DEVICE"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-INSTALL-ON-LOCAL-DEV"
+
+  - tcid: TCID-DIR-INSTALL-ON-LOCAL-DEV-ON-PD
+    name: "TCID-DIR-INSTALL-ON-LOCAL-DEV-ON-PD"
+    description: "Test Director Install on local device using persistent disks"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, INSTALL, LOCAL DEVICE, PD"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-INSTALL-ON-LOCAL-DEV-ON-PD"
+
+  - tcid: TCID-DIR-INSTALL-ON-LOCAL-HP
+    name: "TCID-DIR-INSTALL-ON-LOCAL-HP"
+    description: "Test Director Install on host path"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, INSTALL, LOCAL HOSTPATH"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-INSTALL-ON-LOCAL-HP"
+
+  - tcid: TCID-DIR-INSTALL-ON-LOCAL-HP-ON-PD
+    name: "TCID-DIR-INSTALL-ON-LOCAL-HP-ON-PD"
+    description: "Test Director Install on host path using persistent disks"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, INSTALL, LOCAL HOSTPATH, PD"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-INSTALL-ON-LOCAL-HP-ON-PD"
+
+  - tcid: TCID-DIR-INSTALL-ON-CSTOR
+    name: "TCID-DIR-INSTALL-ON-CSTOR"
+    description: "Test Director Install on cstor"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, INSTALL, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-INSTALL-ON-CSTOR"
+
+  - tcid: TCID-DIR-UPGRADE-ON-LOCAL-DEV
+    name: "TCID-DIR-UPGRADE-ON-LOCAL-DEV"
+    description: "Test Director Upgrade on local device"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, UPGRADE, LOCAL DEVICE"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-UPGRADE-ON-LOCAL-DEV"
+
+  - tcid: TCID-DIR-UPGRADE-ON-LOCAL-DEV-ON-PD
+    name: "TCID-DIR-UPGRADE-ON-LOCAL-DEV-ON-PD"
+    description: "Test Director Upgrade on local device that uses persistent disks"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, UPGRADE, LOCAL DEVICE, PD"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-UPGRADE-ON-LOCAL-DEV-ON-PD"
+
+  - tcid: TCID-DIR-UPGRADE-ON-LOCAL-HP
+    name: "TCID-DIR-UPGRADE-ON-LOCAL-HP"
+    description: "Test Director Upgrade on host path"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, UPGRADE, LOCAL HOSTPATH"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-UPGRADE-ON-LOCAL-HP"
+
+  - tcid: TCID-DIR-UPGRADE-ON-LOCAL-HP-ON-PD
+    name: "TCID-DIR-UPGRADE-ON-LOCAL-HP-ON-PD"
+    description: "Test Director Upgrade on host path that uses persistent disks"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, UPGRADE, LOCAL HOSTPATH, PD"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-UPGRADE-ON-LOCAL-HP-ON-PD"
+
+  - tcid: TCID-DIR-UPGRADE-ON-CSTOR
+    name: "TCID-DIR-UPGRADE-ON-CSTOR"
+    description: "Test Director Upgrade on cstor"
+    labels:
+      test/feature: "DIRECTOR"
+      test/tags: "DIRECTOR, UPGRADE, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/director/installation/TCID-DIR-UPGRADE-ON-CSTOR"
+
+  # --------------------------------------------------
+  # https://e2e.mayadata.io/docs/director/dmaas/dmaas
+  #---------------------------------------------------
+  - tcid: TCID-DIR-DMAAS-RESTORE-ENTIRE-CLUSTER
+    name: "TCID-DIR-DMAAS-RESTORE-ENTIRE-CLUSTER"
+    description: "Test DMAAS restore of the entire cluster"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, RESTORE, CLUSTER"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-RESTORE-ENTIRE-CLUSTER"
+
+  - tcid: TCID-DIR-DMAAS-RESTORE-APP-WITH-LARGE-FILES
+    name: "TCID-DIR-DMAAS-RESTORE-APP-WITH-LARGE-FILES"
+    description: "Test DMAAS restore application with large files"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, RESTORE, APPLICATION, LARGE FILES"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-RESTORE-APP-WITH-LARGE-FILES"
+
+  - tcid: TCID-DIR-DMAAS-RESTORE-APP-WITH-SMALL-FILES
+    name: "TCID-DIR-DMAAS-RESTORE-APP-WITH-SMALL-FILES"
+    description: "Test DMAAS restore application with small files"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, RESTORE, APPLICATION, SMALL FILES"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-RESTORE-APP-WITH-SMALL-FILES"
+
+  - tcid: TCID-DIR-DMAAS-BACKUP-APP-WITH-RESTARTS
+    name: "TCID-DIR-DMAAS-BACKUP-APP-WITH-RESTARTS"
+    description: "Test DMAAS backup of application with restarts"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, BACKUP, APPLICATION, RESTART"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-BACKUP-APP-WITH-RESTARTS"
+
+  - tcid: TCID-DIR-DMAAS-BACKUP-APP-WITH-EVICTION
+    name: "TCID-DIR-DMAAS-BACKUP-APP-WITH-EVICTION"
+    description: "Test DMAAS backup of application with eviction to new node(s)"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, BACKUP, APPLICATION, EVICTION"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-BACKUP-APP-WITH-EVICTION"
+
+  - tcid: TCID-DIR-DMAAS-SOURCE-CLUSTER-GONE
+    name: "TCID-DIR-DMAAS-SOURCE-CLUSTER-GONE"
+    description: "Test DMAAS when source cluster is no longer available"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, MYSQL, SOURCE, UNAVAILABLE"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SOURCE-CLUSTER-GONE"
+
+  - tcid: TCID-DIR-DMAAS-VERSION-COMPATIBILITY-ML
+    name: "TCID-DIR-DMAAS-VERSION-COMPATIBILITY-ML"
+    description: "Test DMAAS for Machine Learning usecases on different Director versions"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, MYSQL, VERSION, COMPATIBILITY, MACHINE LEARNING"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-VERSION-COMPATIBILITY-ML"
+
+  - tcid: TCID-DIR-DMAAS-DATA-MOVEMENT-ACROSS-SETUPS
+    name: "TCID-DIR-DMAAS-DATA-MOVEMENT-ACROSS-SETUPS"
+    description: "Test DMAAS for data movement across setups"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, MYSQL, DATA MOVEMENT, MULTI SETUP"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-DATA-MOVEMENT-ACROSS-SETUPS"
+
+  - tcid: TCID-DIR-DMAAS-MYSQL
+    name: "TCID-DIR-DMAAS-MYSQL"
+    description: "Test DMAAS for MYSQL"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, MYSQL"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-MYSQL"
+
+  - tcid: TCID-DIR-DMAAS-CORTEX
+    name: "TCID-DIR-DMAAS-CORTEX"
+    description: "Test DMAAS for CORTEX"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, CORTEX"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-CORTEX"
+
+  - tcid: TCID-DIR-DMAAS-PORTAL
+    name: "TCID-DIR-DMAAS-PORTAL"
+    description: "Test DMAAS for custom PORTAL"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, PORTAL"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-PORTAL"
+
+  - tcid: TCID-DIR-DMAAS-PSP
+    name: "TCID-DIR-DMAAS-PSP"
+    description: "Test DMAAS for Pod Security Policy"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, PSP"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-PSP"
+
+  - tcid: TCID-DIR-DMAAS-EXCLUDE-SECRET
+    name: "TCID-DIR-DMAAS-EXCLUDE-SECRET"
+    description: "Test DMAAS that excludes backing up kubernetes secrets"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, PSP"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-EXCLUDE-SECRET"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-CSTOR-MINIO-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-CSTOR-MINIO-BUCKET"
+    description: "Test DMAAS schedule for cstor engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, CSTOR, MINIO"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-CSTOR-MINIO-BUCKET"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-CSTOR-AWS-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-CSTOR-AWS-BUCKET"
+    description: "Test DMAAS schedule for cstor engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, CSTOR, AWS"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-CSTOR-AWS-BUCKET"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-JIVA-MINIO-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-JIVA-MINIO-BUCKET"
+    description: "Test DMAAS schedule for jiva engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, JIVA, MINIO"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-JIVA-MINIO-BUCKET"
+
+  - tcid: TCID-DIR-DMAAS-MINIO-DELETE
+    name: "TCID-DIR-DMAAS-MINIO-DELETE"
+    description: "Test DMAAS schedule deletion"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, DELETE, MINIO"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-MINIO-DELETE"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-JIVA-AWS-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-JIVA-AWS-BUCKET"
+    description: "Test DMAAS schedule for jiva engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, JIVA, AWS"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-JIVA-AWS-BUCKET"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-LOCAL-DEV-MINIO-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-LOCAL-DEV-MINIO-BUCKET"
+    description: "Test DMAAS schedule for local pv device engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, LOCAL PV DEVICE, MINIO"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-LOCAL-DEV-MINIO-BUCKET"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-LOCAL-DEV-AWS-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-LOCAL-DEV-AWS-BUCKET"
+    description: "Test DMAAS schedule for local pv device engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, LOCAL PV DEVICE, AWS"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-LOCAL-DEV-AWS-BUCKET"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-LOCAL-HP-MINIO-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-LOCAL-HP-MINIO-BUCKET"
+    description: "Test DMAAS schedule for local pv hostpath engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, LOCAL PV HOSTPATH, MINIO"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-LOCAL-HP-MINIO-BUCKET"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-LOCAL-HP-AWS-BUCKET
+    name: "TCID-DIR-DMAAS-SCHD-LOCAL-HP-AWS-BUCKET"
+    description: "Test DMAAS schedule for local pv hostpath engine"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, LOCAL PV HOSTPATH, AWS"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-LOCAL-HP-AWS-BUCKET"
+
+  - tcid: TCID-DIR-TEAMING-USER-INVITE
+    name: "TCID-DIR-TEAMING-USER-INVITE"
+    description: "Test Teaming user invite functionality"
+    labels:
+      test/feature: "Teaming"
+      test/tags: "DIRECTOR, Teaming, Invite"
+      testplan: "https://e2e.mayadata.io/docs/director/teaming/TCID-DIR-TEAMING-USER-INVITE"
+
+  - tcid: TCID-DIR-TEAMING-USER-ROLE-UPDATE
+    name: "TCID-DIR-TEAMING-USER-ROLE-UPDATE"
+    description: "Test Teaming user role update functionality"
+    labels:
+      test/feature: "Teaming"
+      test/tags: "DIRECTOR, Teaming, Role update"
+      testplan: "https://e2e.mayadata.io/docs/director/teaming/TCID-DIR-TEAMING-USER-ROLE-UPDATE"
+
+  - tcid: TCID-DIR-TEAMING-USER-ROLE-UPDATE-NEGATIVE
+    name: "TCID-DIR-TEAMING-USER-ROLE-UPDATE-NEGATIVE"
+    description: "Negative test Teaming user role update functionality"
+    labels:
+      test/feature: "Teaming"
+      test/tags: "DIRECTOR, Teaming, Role update, Negative"
+      testplan: "https://e2e.mayadata.io/docs/director/teaming/TCID-DIR-TEAMING-USER-ROLE-UPDATE-NEGATIVE"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-SOAK-CASSANDRA
+    name: "TCID-DIR-DMAAS-SCHD-SOAK-CASSANDRA"
+    description: "Test DMAAS schedule for cassandra stateful application"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, CASSANDRA, SOAK"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-SOAK-CASSANDRA"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-SOAK-KAFKA
+    name: "TCID-DIR-DMAAS-SCHD-SOAK-KAFKA"
+    description: "Test DMAAS schedule for kafka stateful application"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, KAFKA, SOAK"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-SOAK-KAFKA"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-SOAK-MYSQL
+    name: "TCID-DIR-DMAAS-SCHD-SOAK-MYSQL"
+    description: "Test DMAAS schedule for mysql stateful application"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, MYSQL, SOAK"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-SOAK-MYSQL"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-SOAK-WORDPRESS
+    name: "TCID-DIR-DMAAS-SCHD-SOAK-WORDPRESS"
+    description: "Test DMAAS schedule for wordpress application"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, WORDPRESS, SOAK"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-SOAK-WORDPRESS"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-SOAK-NGINX
+    name: "TCID-DIR-DMAAS-SCHD-SOAK-NGINX"
+    description: "Test DMAAS schedule for nginx application on a soak setup"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, NGINX, SOAK"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-SOAK-NGINX"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-SOAK-PERCONA
+    name: "TCID-DIR-DMAAS-SCHD-SOAK-PERCONA"
+    description: "Test DMAAS schedule for percona stateful application on a soak setup"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, PERCONA, SOAK"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-SOAK-PERCONA"
+
+  - tcid: TCID-DIR-DMAAS-SCHD-SOAK-MONITOR
+    name: "TCID-DIR-DMAAS-SCHD-SOAK-MONITOR"
+    description: "Test ability to monitor DMAAS schedule on a soak setup"
+    labels:
+      test/feature: "DMAAS"
+      test/tags: "DIRECTOR, DMAAS, SCHEDULE, MONITOR, SOAK"
+      testplan: "https://e2e.mayadata.io/docs/director/dmaas/TCID-DIR-DMAAS-SCHD-SOAK-MONITOR"
+
+  # --------------------------------------------------
+  # https://e2e.mayadata.io/docs/director/openebs-provisioning/provisioning
+  #---------------------------------------------------
+
+  - tcid: TCID-DIR-OP-UPGRADE-CSTOR-POOL
+    name: "TCID-DIR-OP-UPGRADE-CSTOR-POOL"
+    description: "Test upgrade of cstor pool"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR POOL, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-CSTOR-POOL"
+
+  - tcid: TCID-DIR-OP-UPGRADE-CSTOR-VOLUME
+    name: "TCID-DIR-OP-UPGRADE-CSTOR-VOLUME"
+    description: "Test upgrade of cstor volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR VOLUME, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-CSTOR-VOLUME"
+
+  - tcid: TCID-DIR-OP-UPGRADE-CSTOR-POOL-ALL-PODS-RUNNING
+    name: "TCID-DIR-OP-UPGRADE-CSTOR-POOL-ALL-PODS-RUNNING"
+    description: "Test upgrade of cstor pool when all pool pods are running"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR POOL, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-CSTOR-POOL-ALL-PODS-RUNNING"
+
+  - tcid: TCID-DIR-OP-UPGRADE-CSTOR-POOL-ONE-POD-PENDING
+    name: "TCID-DIR-OP-UPGRADE-CSTOR-POOL-ONE-POD-PENDING"
+    description: "Test upgrade of cstor pool when one pool pod is in pending state"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR POOL, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-CSTOR-POOL-ONE-POD-PENDING"
+
+  - tcid: TCID-DIR-OP-UPGRADE-CSTOR-POOL-ALL-PODS-PENDING
+    name: "TCID-DIR-OP-UPGRADE-CSTOR-POOL-ALL-PODS-PENDING"
+    description: "Test upgrade of cstor pool when all pool pods are in pending state"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR POOL, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-CSTOR-POOL-ALL-PODS-PENDING"
+
+  - tcid: TCID-DIR-OP-UPGRADE-JIVA-VOLUME
+    name: "TCID-DIR-OP-UPGRADE-JIVA-VOLUME"
+    description: "Test upgrade of jiva volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, JIVA, VOLUME, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-JIVA-VOLUME"
+
+  - tcid: TCID-DIR-OP-UPGRADE-JIVA-VOLUME-ONE-REPLICA-PENDING
+    name: "TCID-DIR-OP-UPGRADE-JIVA-VOLUME-ONE-REPLICA-PENDING"
+    description: "Test upgrade of jiva volume with one replica in pending state"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, JIVA, VOLUME, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-JIVA-VOLUME-ONE-REPLICA-PENDING"
+
+  - tcid: TCID-DIR-OP-UPGRADE-JIVA-VOLUME-ALL-REPLICAS-PENDING
+    name: "TCID-DIR-OP-UPGRADE-JIVA-VOLUME-ALL-REPLICAS-PENDING"
+    description: "Test upgrade of jiva volume with all replicas in pending state"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, JIVA, VOLUME, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-JIVA-VOLUME-ALL-REPLICAS-PENDING"
+
+  - tcid: TCID-DIR-OP-UPGRADE-JIVA-VOLUME-TWO-REPLICAS-PENDING
+    name: "TCID-DIR-OP-UPGRADE-JIVA-VOLUME-TWO-REPLICAS-PENDING"
+    description: "Test upgrade of jiva volume with two replicas in pending state"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, JIVA, VOLUME, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-UPGRADE-JIVA-VOLUME-TWO-REPLICAS-PENDING"
+
+  - tcid: TCID-DIR-OP-DEVICE-VIEW-ALL
+    name: "TCID-DIR-OP-DEVICE-VIEW-ALL"
+    description: "Test listing of storage device(s)"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, DEVICE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DEVICE-VIEW-ALL"
+
+  - tcid: TCID-DIR-OP-DEVICE-VIEW-SCALE
+    name: "TCID-DIR-OP-DEVICE-VIEW-SCALE"
+    description: "Test listing of storage device(s) on a scaled setup"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, DEVICE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DEVICE-VIEW-SCALE"
+
+  - tcid: TCID-DIR-OP-DEVICE-VIEW-SCALE-RESTART
+    name: "TCID-DIR-OP-DEVICE-VIEW-SCALE-RESTART"
+    description: "Test listing of storage device(s) on a scaled setup that has restarts"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, DEVICE, RESTART"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DEVICE-VIEW-SCALE-RESTART"
+
+  - tcid: TCID-DIR-OP-DEVICE-FILTER-SSD
+    name: "TCID-DIR-OP-DEVICE-FILTER-SSD"
+    description: "Test listing of ssd storage device(s)"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, DEVICE, SSD"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DEVICE-FILTER-SSD"
+
+  - tcid: TCID-DIR-OP-DEVICE-FILTER-PATH
+    name: "TCID-DIR-OP-DEVICE-FILTER-PATH"
+    description: "Test filtering storage device(s) by path"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, DEVICE, PATH"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DEVICE-FILTER-PATH"
+
+  - tcid: TCID-DIR-OP-DEVICE-IGNORE-NODE
+    name: "TCID-DIR-OP-DEVICE-IGNORE-NODE"
+    description: "Test filtering storage device(s) by nodes"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, DEVICE, NODE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DEVICE-IGNORE-NODE"
+
+  - tcid: TCID-DIR-OP-DEVICE-TOGGLE-NODE
+    name: "TCID-DIR-OP-DEVICE-TOGGLE-NODE"
+    description: "Test filtering storage device(s) by nodes"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, DEVICE, NODE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DEVICE-TOGGLE-NODE"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST"
+    description: "Test listing of cstor pool recommendations"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, RECOMMENDATIONS"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST"
+
+  - tcid: TCID-DIR-OP-INSTALL-OPENEBS
+    name: "TCID-DIR-OP-INSTALL-OPENEBS"
+    description: "Install OpenEBS on user Cluster using director"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, INSTALL"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-INSTALL-OPENEBS"
+
+  - tcid: TCID-DIR-OP-INSTALL-OPENEBS-CP-ON-SPECIFIC-NODE
+    name: "TCID-DIR-OP-INSTALL-OPENEBS-CP-ON-SPECIFIC-NODE"
+    description: "Install OpenEBS Control plane components on a specific set of nodes"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, INSTALL"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-INSTALL-OPENEBS-CP-ON-SPECIFIC-NODE"
+
+  - tcid: TCID-DIR-OP-INSTALL-OPENEBS-DP-ON-SPECIFIC-NODE
+    name: "TCID-DIR-OP-INSTALL-OPENEBS-DP-ON-SPECIFIC-NODE"
+    description: "Install OpenEBS Data plane components on a specific set of nodes"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, INSTALL"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-INSTALL-OPENEBS-DP-ON-SPECIFIC-NODE"
+
+  - tcid: TCID-DIR-OP-RE-INSTALL-OPENEBS
+    name: "TCID-DIR-OP-RE-INSTALL-OPENEBS"
+    description: "Install OpenEBS on a machine already OpenEBS is installed with same version using operator."
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, INSTALL"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-RE-INSTALL-OPENEBS" 
+
+  - tcid: TCID-DIR-OP-INSTALL-OPENEBS-LIMIT-RESOURCE
+    name: "TCID-DIR-OP-INSTALL-OPENEBS-LIMIT-RESOURCE"
+    description: "Install OpenEBS using custom resource limits"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, INSTALL"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-INSTALL-OPENEBS-LIMIT-RESOURCE" 
+  
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-STRIPE
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-STRIPE"
+    description: "Test listing of stripe based cstor pool recommendations"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, STRIPE, RECOMMENDATIONS"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-STRIPE"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-MIRROR
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-MIRROR"
+    description: "Test listing of mirror based cstor pool recommendations"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, MIRROR, RECOMMENDATIONS"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-MIRROR"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-RAIDZ
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-RAIDZ"
+    description: "Test listing of raidz based cstor pool recommendations"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, RAIDZ, RECOMMENDATIONS"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-RAIDZ"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-RAIDZ
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-RAIDZ"
+    description: "Test creation of raidz based cstor pool recommendations"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, RAIDZ, RECOMMENDATIONS"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-RAIDZ"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-MIRROR
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-MIRROR"
+    description: "Test creation of mirror based cstor pool recommendations"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, MIRROR, RECOMMENDATIONS"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-MIRROR"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-STRIPE
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-STRIPE"
+    description: "Test creation of stripe based cstor pool recommendations"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, STRIPE, RECOMMENDATIONS"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-CREATE-STRIPE"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-NO-NDM
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-NO-NDM"
+    description: "Test list of cstor pool recommendations when NDM is not running"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, RECOMMENDATIONS, NDM"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-LIST-NO-NDM"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-MIRROR-UPGRADE-NODE
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-MIRROR-UPGRADE-NODE"
+    description: "Test mirror based cstor pool when node is upgraded"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, MIRROR, NODE, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-MIRROR-UPGRADE-NODE"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-RAIDZ-UPGRADE-NODE
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-RAIDZ-UPGRADE-NODE"
+    description: "Test raidz based cstor pool when node is upgraded"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, RAIDZ, NODE, UPGRADE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-RAIDZ-UPGRADE-NODE"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-MIRROR-REBOOT-NODE
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-MIRROR-REBOOT-NODE"
+    description: "Test mirror based cstor pool when node is rebooted"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, MIRROR, NODE, REBOOT"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-MIRROR-REBOOT-NODE"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-RECOMMEND-RAIDZ-REBOOT-NODE
+    name: "TCID-DIR-OP-CSTOR-POOL-RECOMMEND-RAIDZ-REBOOT-NODE"
+    description: "Test raidz based cstor pool when node is rebooted"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, RAIDZ, NODE, REBOOT"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-RECOMMEND-RAIDZ-REBOOT-NODE"
+
+  - tcid: TCID-DIR-OP-DELETE-SPC-WITH-NO-VOLUME
+    name: "TCID-DIR-OP-DELETE-SPC-WITH-NO-VOLUME"
+    description: "Delete SPC via director which has no volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, DELETE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DELETE-SPC-WITH-NO-VOLUME"
+
+  - tcid: TCID-DIR-OP-DELETE-SPC-WITH-VOLUME
+    name: "TCID-DIR-OP-DELETE-SPC-WITH-VOLUME"
+    description: "Delete SPC via director which has volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, DELETE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DELETE-SPC-WITH-VOLUME"
+
+  - tcid: TCID-DIR-OP-DELETE-EXTERNAL-CSPC-WITH-VOLUME
+    name: "TCID-DIR-OP-DELETE-EXTERNAL-CSPC-WITH-VOLUME"
+    description: "Delete CSPC not created via director which has volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, DELETE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DELETE-EXTERNAL-CSPC-WITH-VOLUME"
+
+  - tcid: TCID-DIR-OP-DELETE-EXTERNAL-CSPC-WITH-NO-VOLUME
+    name: "TCID-DIR-OP-DELETE-EXTERNAL-CSPC-WITH-NO-VOLUME"
+    description: "Delete CSPC not created via director which has no volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, DELETE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DELETE-EXTERNAL-CSPC-WITH-NO-VOLUME"
+
+  - tcid: TCID-DIR-OP-DELETE-CSPC-WITH-NO-VOLUME
+    name: "TCID-DIR-OP-DELETE-CSPC-WITH-NO-VOLUME"
+    description: "Delete CSPC created via director which has no volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, DELETE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DELETE-CSPC-WITH-NO-VOLUME"
+
+  - tcid: TCID-DIR-OP-DELETE-CSPC-WITH-VOLUME
+    name: "TCID-DIR-OP-DELETE-CSPC-WITH-VOLUME"
+    description: "Delete CSPC created via director which has volume"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, DELETE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-DELETE-CSPC-WITH-VOLUME"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-DAY2-REPLACE-BAD-DISK
+    name: "TCID-DIR-OP-CSTOR-POOL-DAY2-REPLACE-BAD-DISK"
+    description: "Test bad disk replacement in cstor pool"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, BAD, DISK, REPLACEMENT"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-DAY2-REPLACE-BAD-DISK"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-DAY2-ADD-DISK
+    name: "TCID-DIR-OP-CSTOR-POOL-DAY2-ADD-DISK"
+    description: "Test add disk in cstor pool"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, ADD, DISK"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-DAY2-ADD-DISK"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-BAD-DISK
+    name: "TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-BAD-DISK"
+    description: "Test bad disk notification in cstor pool"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, NOTIFY, BAD, DISK"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-BAD-DISK"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-POOL-CAP
+    name: "TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-POOL-CAP"
+    description: "Test pool capacity notification in cstor pool"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, POOL, CAPACITY, NOTIFY"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-POOL-CAP"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-POOL-PERF
+    name: "TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-POOL-PERF"
+    description: "Test cstor pool performance notification"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, POOL, PERFORMANCE, NOTIFY"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-DAY2-NOTIFY-POOL-PERF"
+
+  - tcid: TCID-DIR-OP-CSTOR-POOL-DAY2-VOL-RE-BALANCE
+    name: "TCID-DIR-OP-CSTOR-POOL-DAY2-VOL-RE-BALANCE"
+    description: "Test volume rebalancing in cstor pool"
+    labels:
+      test/feature: "OPENEBS PROVISIONING"
+      test/tags: "DIRECTOR, OPENEBS PROVISIONING, CSTOR, POOL, VOLUME, RE-BALANCE"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-OP-CSTOR-POOL-DAY2-VOL-RE-BALANCE"
+
+  # --------------------------------------------------
+  # https://e2e.mayadata.io/docs/director/authentication/authentication
+  #---------------------------------------------------
+  - tcid: TCID-DIR-AUTH-LOCAL-ADMIN
+    name: "TCID-DIR-AUTH-LOCAL-ADMIN"
+    description: "Test director authentication with local admin"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, ADMIN"      
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-LOCAL-ADMIN"
+
+  - tcid: TCID-DIR-AUTH-LOCAL-USER
+    name: "TCID-DIR-AUTH-LOCAL-USER"
+    description: "Test director authentication with local user"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, USER"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-LOCAL-USER"
+
+  - tcid: TCID-DIR-AUTH-LOCAL-PERF
+    name: "TCID-DIR-AUTH-LOCAL-PERF"
+    description: "Test director local authentication performance"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, PERFORMANCE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-LOCAL-PERF"
+
+  - tcid: TCID-DIR-AUTH-LOCAL-SCALE
+    name: "TCID-DIR-AUTH-LOCAL-SCALE"
+    description: "Test director local authentication with several hundreds of users"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, SCALE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-LOCAL-SCALE"
+
+  - tcid: TCID-DIR-AUTH-GH-ADMIN
+    name: "TCID-DIR-AUTH-GH-ADMIN"
+    description: "Test director authentication via GitHub admin"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GITHUB ADMIN"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GH-ADMIN"
+
+  - tcid: TCID-DIR-AUTH-GH-USER
+    name: "TCID-DIR-AUTH-GH-USER"
+    description: "Test director authentication via GitHub user"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GITHUB USER"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GH-USER"
+
+  - tcid: TCID-DIR-AUTH-GH-PERF
+    name: "TCID-DIR-AUTH-GH-PERF"
+    description: "Test director authentication performance with GitHub as auth provider"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GITHUB, PERFORMANCE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GH-PERF"
+
+  - tcid: TCID-DIR-AUTH-GH-SCALE
+    name: "TCID-DIR-AUTH-GH-SCALE"
+    description: "Test director authentication with GitHub as auth provider & lots of users"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GITHUB, SCALE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GH-SCALE"
+
+  - tcid: TCID-DIR-AUTH-GOOGLE-ADMIN
+    name: "TCID-DIR-AUTH-GOOGLE-ADMIN"
+    description: "Test director authentication via GOOGLE admin"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GOOGLE ADMIN"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GOOGLE-ADMIN"
+
+  - tcid: TCID-DIR-AUTH-GOOGLE-USER
+    name: "TCID-DIR-AUTH-GOOGLE-USER"
+    description: "Test director authentication via GOOGLE user"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GOOGLE USER"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GOOGLE-USER"
+
+  - tcid: TCID-DIR-AUTH-GOOGLE-PERF
+    name: "TCID-DIR-AUTH-GOOGLE-PERF"
+    description: "Test director authentication performance with GOOGLE as auth provider"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GOOGLE, PERFORMANCE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GOOGLE-PERF"
+
+  - tcid: TCID-DIR-AUTH-GOOGLE-SCALE
+    name: "TCID-DIR-AUTH-GOOGLE-SCALE"
+    description: "Test director authentication with GOOGLE as auth provider & lots of users"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, GOOGLE, SCALE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-GOOGLE-SCALE"
+
+  - tcid: TCID-DIR-AUTH-AD-ADMIN
+    name: "TCID-DIR-AUTH-AD-ADMIN"
+    description: "Test director authentication via AD admin"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, AD ADMIN"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-AD-ADMIN"
+
+  - tcid: TCID-DIR-AUTH-AD-USER
+    name: "TCID-DIR-AUTH-AD-USER"
+    description: "Test director authentication via AD user"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, AD USER"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-AD-USER"
+
+  - tcid: TCID-DIR-AUTH-AD-PERF
+    name: "TCID-DIR-AUTH-AD-PERF"
+    description: "Test director authentication performance with AD as auth provider"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, AD, PERFORMANCE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-AD-PERF"
+
+  - tcid: TCID-DIR-AUTH-AD-SCALE
+    name: "TCID-DIR-AUTH-AD-SCALE"
+    description: "Test director authentication with AD as auth provider & lots of users"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION, LOCAL, AD, SCALE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-DIR-AUTH-AD-SCALE"
+
+  - tcid: TCID-GUI-AUTH
+    name: "TCID-GUI-AUTH"
+    description: "Test director GUI authentication"
+    labels:
+      test/feature: "DIRECTOR AUTHENTICATION"
+      test/tags: "DIRECTOR, AUTHENTICATION"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-GUI-AUTH"
+
+  - tcid: TCID-GUI-CLUSTER
+    name: "TCID-GUI-CLUSTER"
+    description: "Test director cluster"
+    labels:
+      test/feature: "DIRECTOR CLUSTER"
+      test/tags: "DIRECTOR, CLUSTER"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-GUI-CLUSTER"
+
+  - tcid: TCID-GUI-DASHBOARD
+    name: "TCID-GUI-DASHBOARD"
+    description: "Test director dashboard"
+    labels:
+      test/feature: "DIRECTOR DASHBOARD"
+      test/tags: "DIRECTOR, DASHBOARD"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-GUI-DASHBOARD"
+
+  - tcid: TCID-GUI-PROFILE
+    name: "TCID-GUI-PROFILE"
+    description: "Test director profile"
+    labels:
+      test/feature: "DIRECTOR PROFILE"
+      test/tags: "DIRECTOR, PROFILE"
+      testplan: "https://e2e.mayadata.io/docs/director/authentication/TCID-GUI-PROFILE"
+
+  - tcid: TCID-DIR-GUI-OPENEBS-COMPONENTS-VERSION
+    name: "TCID-DIR-GUI-OPENEBS-COMPONENTS-VERSION"
+    description: "Test director OpenEBS components version"
+    labels:
+      test/feature: "DIRECTOR OPENEBS COMPONENTS VERSION"
+      test/tags: "DIRECTOR, OPENEBS, VERSION"
+      testplan: "https://e2e.mayadata.io/docs/director/openebs-provisioning/TCID-DIR-GUI-OPENEBS-COMPONENTS-VERSION"
+
+###############################################################################################################################
+####################################### OpenEBS Functional Scenarios ##########################################################
+###############################################################################################################################
+
+  - tcid: TCID-JIVA-APP-TARGET-AFFINITY
+    name: "TCID-JIVA-APP-TARGET-AFFINITY"
+    description: "Test OpenEBS Jiva target and application pod stickiness on a node"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-JIVA-APP-TARGET-AFFINITY"
+
+  - tcid: TCID-JIVA-SNAPSHOT-CREATE
+    name: "TCID-JIVA-SNAPSHOT-CREATE"
+    description: "Test creation of snapshot on Jiva Volume"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-JIVA-SNAPSHOT-CREATE"
+
+  - tcid: TCID-JIVA-VOLUME-SCALEUP
+    name: "TCID-JIVA-VOLUME-SCALEUP"
+    description: "Test Jiva volume scaleup"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-JIVA-VOLUME-SCALEUP"
+
+  - tcid: TCID-CSTOR-SNAPSHOT-CREATE
+    name: "TCID-CSTOR-SNAPSHOT-CREATE"
+    description: "Test creation of snapshot on cStor Volume"
+    labels:
+      test/feature: "OPENEBS CSTOR"
+      test/tags: "OPENEBS, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-CSTOR-SNAPSHOT-CREATE"
+
+  - tcid: TCID-CSTOR-CLONE-CREATE
+    name: "TCID-CSTOR-CLONE-CREATE"
+    description: "Test creation of clone of cStor Volume using snapshot"
+    labels:
+      test/feature: "OPENEBS CSTOR"
+      test/tags: "OPENEBS, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-CSTOR-CLONE-CREATE"
+
+  - tcid: TCID-CSTOR-VOLUME-EXT4-RESIZE
+    name: "TCID-CSTOR-VOLUME-EXT4-RESIZE"
+    description: "Test cStor volume expansion based on ext4 file system"
+    labels:
+      test/feature: "OPENEBS CSTOR"
+      test/tags: "OPENEBS, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-CSTOR-VOLUME-EXT4-RESIZE"
+
+  - tcid: TCID-CSTOR-VOLUME-XFS-RESIZE
+    name: "TCID-CSTOR-VOLUME-XFS-RESIZE"
+    description: "Test cStor volume expansion based on XFS file system"
+    labels:
+      test/feature: "OPENEBS CSTOR"
+      test/tags: "OPENEBS, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-CSTOR-VOLUME-XFS-RESIZE"
+
+  - tcid: TCID-LOCALPV-HOSTPATH-CREATE
+    name: "TCID-LOCALPV-HOSTPATH-CREATE"
+    description: "Test creation of OpenEBS LocalPV using hostpath"
+    labels:
+      test/feature: "OPENEBS LOCALPV"
+      test/tags: "OPENEBS, LOCALPV"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-LOCALPV-HOSTPATH-CREATE"
+
+  - tcid: TCID-LOCALPV-RANDOM-DEVICE-CREATE
+    name: "TCID-LOCALPV-RANDOM-DEVICE-CREATE"
+    description: "Test creation of OpenEBS LocalPV using randomly selected block device detected by NDM"
+    labels:
+      test/feature: "OPENEBS LOCALPV"
+      test/tags: "OPENEBS, LOCALPV"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-LOCALPV-RANDOM-DEVICE-CREATE"
+
+  - tcid: TCID-LOCALPV-SELECTED-DEVICE-CREATE
+    name: "TCID-LOCALPV-SELECTED-DEVICE-CREATE"
+    description: "Test creation of OpenEBS LocalPV using selected block device"
+    labels:
+      test/feature: "OPENEBS LOCALPV"
+      test/tags: "OPENEBS, LOCALPV"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-FUNCTIONAL/TCID-LOCALPV-SELECTED-DEVICE-CREATE"
+
+
+###############################################################################################################################
+############################################ OpenEBS Chaos Scenarios ##########################################################
+###############################################################################################################################
+
+  - tcid: TCID-JIVA-BUSYBOX-KILL
+    name: "TCID-JIVA-BUSYBOX-KILL"
+    description: "Kill busybox application pod and test if jiva volume can be remounted"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-JIVA-BUSYBOX-KILL"
+
+  - tcid: TCID-JIVA-MULTIPLE-REPLICAS-FAILURE
+    name: "TCID-JIVA-MULTIPLE-REPLICAS-FAILURE"
+    description: "Kill multiple jiva volume replicas and verify the revision counter file"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-JIVA-MULTIPLE-REPLICAS-FAILURE"
+
+  - tcid: TCID-JIVA-REPLICA-NETWORK-DELAY
+    name: "TCID-JIVA-REPLICA-NETWORK-DELAY"
+    description: "Induce network delay in Jiva replica pod"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-JIVA-REPLICA-NETWORK-DELAY"
+
+  - tcid: TCID-JIVA-CONTROLLER-KILL
+    name: "TCID-JIVA-CONTROLLER-KILL"
+    description: "Kill Jiva controller pod and check volume accessibility"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-JIVA-CONTROLLER-KILL"
+
+  - tcid: TCID-JIVA-CONTROLLER-NETWORK-DELAY
+    name: "TCID-JIVA-CONTROLLER-NETWORK-DELAY"
+    description: "Induce network delay in Jiva controller pod"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-JIVA-CONTROLLER-NETWORK-DELAY"
+
+  - tcid: TCID-JIVA-REPLICA-NODE-AFFINITY
+    name: "TCID-JIVA-REPLICA-NODE-AFFINITY"
+    description: "Delete Jiva replica pod and check its stickiness with node"
+    labels:
+      test/feature: "OPENEBS JIVA"
+      test/tags: "OPENEBS, JIVA"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-JIVA-REPLICA-NODE-AFFINITY"
+
+  - tcid: TCID-CSTOR-BUSYBOX-APP-KILL
+    name: "TCID-CSTOR-BUSYBOX-APP-KILL"
+    description: "Kill busybox application pod and test if cStor volume can be remounted"
+    labels:
+      test/feature: "OPENEBS CSTOR"
+      test/tags: "OPENEBS, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-CSTOR-BUSYBOX-APP-KILL"
+
+  - tcid: TCID-CSTOR-TARGET-KILL
+    name: "TCID-CSTOR-TARGET-KILL"
+    description: "Kill cstor target pod and check volume accessiblity"
+    labels:
+      test/feature: "OPENEBS CSTOR"
+      test/tags: "OPENEBS, CSTOR"
+      testplan: "https://e2e.mayadata.io/docs/openebs-enterprise/OPENEBS-CHAOS/TCID-CSTOR-TARGET-KILL"

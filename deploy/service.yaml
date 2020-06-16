@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: e2e-metrics
+  annotations:
+    prometheus.io/path: /metrics/e2e
+    prometheus.io/port: "9898"
+    prometheus.io/scrape: "true"
+  name: e2e-metrics
+  namespace: e2e-metrics
+spec:
+  ports:
+  - name: exporter
+    port: 9898
+    protocol: TCP
+    targetPort: exporter
+  selector:
+    name: e2e-metrics

@@ -24,8 +24,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/golang/glog"
+	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
+	"k8s.io/klog/v2"
+
+	prom "mayadata.io/e2e-metrics/metrics"
 )
 
 const (
@@ -70,16 +73,18 @@ const (
 	DesiredTestCaseNameDelimiter string = ": "
 )
 
-// MetricsConfig has required details on actual vs. desired
+// TestCasesMetrics has required details on actual vs. desired
 // e2e test cases
-type MetricsConfig struct {
+type TestCasesMetrics struct {
 	DesiredTestCases    map[string]bool
 	ActualTestCases     map[string]bool
 	DeprecatedTestCases []string
 }
 
-// Config is the path to the config files
-type Config struct {
+// Loadable helps loading the testcase config files
+type Loadable struct {
+	log  logr.Logger
+	prom *prom.Metrics
 	Path string
 
 	// File that has all the desired test cases
@@ -89,10 +94,18 @@ type Config struct {
 	ActualTestCasesFileName string
 }
 
+type LoadableConfig struct {
+	Log  logr.Logger
+	Prom *prom.Metrics
+	Path string
+}
+
 // New returns a new instance of config
-func New(path string) *Config {
-	return &Config{
-		Path:                     path,
+func New(conf LoadableConfig) *Loadable {
+	return &Loadable{
+		Path:                     conf.Path,
+		log:                      conf.Log,
+		prom:                     conf.Prom,
 		DesiredTestCasesFileName: ".master-plan.yml",
 		ActualTestCasesFileName:  ".gitlab-ci.yml",
 	}
@@ -100,10 +113,11 @@ func New(path string) *Config {
 
 // LoadOrEmpty loads all config files if available or
 // returns empty config along with load error
-func (c *Config) LoadOrEmpty() (*MetricsConfig, error) {
+func (c *Loadable) LoadOrEmpty() (*TestCasesMetrics, error) {
 	mc, err := c.Load()
 	if err != nil {
-		mc = &MetricsConfig{
+		// set an empty metrics if error
+		mc = &TestCasesMetrics{
 			DesiredTestCases: map[string]bool{},
 			ActualTestCases:  map[string]bool{},
 		}
@@ -112,8 +126,9 @@ func (c *Config) LoadOrEmpty() (*MetricsConfig, error) {
 }
 
 // Load loads all config files or load error
-func (c *Config) Load() (*MetricsConfig, error) {
-	glog.V(3).Infof("Will load config(s) from path %q", c.Path)
+func (c *Loadable) Load() (*TestCasesMetrics, error) {
+	log := c.log
+	log.V(3).Info("Will load test case config(s)", "path", c.Path)
 
 	files, readDirErr := ioutil.ReadDir(c.Path)
 	if readDirErr != nil {
@@ -124,21 +139,21 @@ func (c *Config) Load() (*MetricsConfig, error) {
 			errors.Errorf("No config(s) found at %q", c.Path)
 	}
 
-	var out = &MetricsConfig{
+	var out = &TestCasesMetrics{
 		DesiredTestCases: map[string]bool{},
 		ActualTestCases:  map[string]bool{},
 	}
 
 	registerActualTestCaseNamesFn := func(lineContent string) {
-		glog.V(6).Infof("Actual: Received %q", lineContent)
+		log.V(6).Info("Actual testcase", "Received", lineContent)
 		lineContent = strings.TrimSpace(lineContent)
 		if strings.HasPrefix(lineContent, ActualTestCaseNamePrefix) {
 			tcid := strings.TrimSuffix(lineContent, ":")
-			glog.V(3).Infof("Registering actual tcid %q", tcid)
+			log.V(3).Info("Registering actual tcid", "name", tcid)
 			out.ActualTestCases[tcid] = true
 		} else if strings.HasPrefix(lineContent, DeprecatedTestCaseIDPrefix) {
 			tcid := strings.TrimSuffix(lineContent, ":")
-			glog.V(3).Infof("Registering deprecated tcid %q", tcid)
+			log.V(3).Info("Registering deprecated tcid", "name", tcid)
 			out.DeprecatedTestCases = append(
 				out.DeprecatedTestCases,
 				tcid,
@@ -146,13 +161,13 @@ func (c *Config) Load() (*MetricsConfig, error) {
 		}
 	}
 	registerDesiredTestCaseNamesFn := func(lineContent string) {
-		glog.V(6).Infof("Desired: Received %q", lineContent)
+		log.V(6).Info("Desired testcase", "Received", lineContent)
 		lineContent = strings.TrimSpace(lineContent)
 		if strings.HasPrefix(lineContent, DesiredTestCaseNamePrefix) {
 			words := strings.Split(lineContent, DesiredTestCaseNameDelimiter)
 			if len(words) == 2 {
 				tcid := strings.TrimSpace(words[1])
-				glog.V(3).Infof("Registering desired tcid %q", tcid)
+				log.V(3).Info("Registering desired tcid", "name", tcid)
 				out.DesiredTestCases[tcid] = true
 			}
 		}
@@ -172,20 +187,20 @@ func (c *Config) Load() (*MetricsConfig, error) {
 	for _, file := range files {
 		fileName := file.Name()
 		if file.IsDir() || file.Mode().IsDir() {
-			glog.V(4).Infof(
-				"Will skip config %q at path %q: Not a file",
-				fileName,
-				c.Path,
+			log.V(4).Info(
+				"Will skip config: Not a file",
+				"file", fileName,
+				"path", c.Path,
 			)
 			// we don't load folder(s)
 			continue
 		}
 		if !strings.HasSuffix(fileName, ".yaml") &&
 			!strings.HasSuffix(fileName, ".yml") {
-			glog.V(4).Infof(
-				"Will skip config %q at path %q: Not a yaml file",
-				fileName,
-				c.Path,
+			log.V(4).Info(
+				"Will skip config: Not a yaml file",
+				"file", fileName,
+				"path", c.Path,
 			)
 			// we support only yaml files
 			continue
@@ -194,18 +209,17 @@ func (c *Config) Load() (*MetricsConfig, error) {
 		// found in this file based on the name of this file
 		registerTestCaseNames := getRegisterTestCaseNamesFuncForFileName(fileName)
 		if registerTestCaseNames == nil {
-			glog.V(4).Infof(
-				"Will skip config %q at path %q: Want %q or %q",
-				fileName,
-				c.Path,
-				c.DesiredTestCasesFileName,
-				c.ActualTestCasesFileName,
+			log.V(4).Info(
+				"Will skip config",
+				"got-file", fileName,
+				"path", c.Path,
+				"want-file", c.DesiredTestCasesFileName, c.ActualTestCasesFileName,
 			)
 			continue
 		}
 		// build full file path
 		fileNameWithPath := c.Path + fileName
-		glog.V(2).Infof("Will load config %q", fileNameWithPath)
+		log.V(2).Info("Will load config", "file", fileNameWithPath)
 
 		// logic that parses the file & registers the test case names
 		// found in this file
@@ -218,14 +232,34 @@ func (c *Config) Load() (*MetricsConfig, error) {
 			)
 		}
 	}
-	glog.V(4).Infof("Config(s) loaded successfully from path %q", c.Path)
+	log.V(4).Info("Config(s) loaded successfully", "path", c.Path)
+
+	actualTestCaseCount := len(out.ActualTestCases)
+	desiredTestCaseCount := len(out.DesiredTestCases)
+	c.prom.SetActualTestCount(&prom.ActualTestCount{
+		BaseTestCount: prom.BaseTestCount{
+			Value:                  float64(actualTestCaseCount),
+			TestImplementationType: prom.TestImplementationTypeLitmus,
+		},
+	})
+	c.prom.SetPlannedTestCount(&prom.PlannedTestCount{
+		BaseTestCount: prom.BaseTestCount{
+			Value:                  float64(desiredTestCaseCount),
+			TestImplementationType: prom.TestImplementationTypeLitmus,
+		},
+	})
+	log.V(4).Info(
+		"Prometheus metrics were set",
+		"actual-test-count", actualTestCaseCount,
+		"desired-test-count", desiredTestCaseCount,
+	)
 	return out, nil
 }
 
 // processFileByLine parses the given file using
 // the provided parse logic
 func parseFileByLine(filename string, process func(string)) (err error) {
-	glog.V(3).Infof("Will parse file %q", filename)
+	klog.V(3).Infof("Will parse file %q", filename)
 	file, err := os.Open(filename)
 	defer file.Close()
 	if err != nil {
@@ -270,6 +304,6 @@ func parseFileByLine(filename string, process func(string)) (err error) {
 	if err != io.EOF {
 		return err
 	}
-	glog.V(4).Infof("Parsed file %q successfully", filename)
+	klog.V(4).Infof("Parsed file %q successfully", filename)
 	return nil
 }
