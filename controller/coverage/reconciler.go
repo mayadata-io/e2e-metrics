@@ -22,17 +22,19 @@ import (
 	"os"
 	"strings"
 
-	"github.com/golang/glog"
+	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"openebs.io/metac/controller/generic"
 
 	"mayadata.io/e2e-metrics/config"
+	prom "mayadata.io/e2e-metrics/metrics"
 	"mayadata.io/e2e-metrics/pkg/metac"
 	"mayadata.io/e2e-metrics/types"
 )
 
 type errHandler struct {
+	log      logr.Logger
 	watch    *unstructured.Unstructured
 	response *generic.SyncHookResponse
 }
@@ -42,13 +44,30 @@ func (e *errHandler) handle(err error) {
 		// do nothing
 		return
 	}
-	glog.Errorf(
-		"Failed to sync 'Namespace' %q: %+v", e.watch.GetName(), err,
+	e.log.Error(
+		err,
+		"Failed to sync Namespace",
+		"name",
+		e.watch.GetName(),
 	)
 	// this will stop further reconciliation at metac
 	e.response.SkipReconcile = true
 	// set error to nil to avoid panic
 	err = nil
+}
+
+// Syncable helps in reconciling PipelineCoverage custom resource
+type Syncable struct {
+	log  logr.Logger
+	prom *prom.Metrics
+}
+
+// NewSyncer returns a new instance of Syncable
+func NewSyncer(log logr.Logger, prom *prom.Metrics) *Syncable {
+	return &Syncable{
+		log:  log,
+		prom: prom,
+	}
 }
 
 // Sync implements the idempotent logic to reconcile Namespace
@@ -66,7 +85,10 @@ func (e *errHandler) handle(err error) {
 // NOTE:
 //	Returning error will panic this process. We would rather want
 // this controller to run continuously. Hence, the errors are handled.
-func Sync(request *generic.SyncHookRequest, response *generic.SyncHookResponse) error {
+func (s *Syncable) Sync(
+	request *generic.SyncHookRequest,
+	response *generic.SyncHookResponse,
+) error {
 	if request == nil {
 		// this will panic
 		return errors.Errorf("Failed to sync 'Namespace': Nil request")
@@ -80,19 +102,23 @@ func Sync(request *generic.SyncHookRequest, response *generic.SyncHookResponse) 
 		return errors.Errorf("Failed to sync 'Namespace': Nil response")
 	}
 
+	log := s.log
 	podNS := os.Getenv("MY_POD_NAMESPACE")
 	if request.Watch.GetName() != podNS {
-		glog.V(4).Infof(
-			"Will skip 'Namespace' %q: Want %q", request.Watch.GetName(), podNS,
+		log.V(4).Info(
+			"Will skip sync",
+			"got-namespace", request.Watch.GetName(),
+			"want-namespace", podNS,
 		)
 		response.SkipReconcile = true
 		return nil
 	}
 
-	glog.V(3).Infof("Will sync 'Namespace' %q", request.Watch.GetName())
+	log.V(3).Info("Will sync", "namespace", request.Watch.GetName())
 
 	// construct the error handler
 	errHandler := &errHandler{
+		log:      log,
 		watch:    request.Watch,
 		response: response,
 	}
@@ -112,13 +138,18 @@ func Sync(request *generic.SyncHookRequest, response *generic.SyncHookResponse) 
 		}
 	}
 
-	reconciler := NewReconciler(observedCoverage)
+	reconciler := NewReconciler(ReconcilerConfig{
+		Log:                      log,
+		Prom:                     s.prom,
+		ObservedPipelineCoverage: observedCoverage,
+	})
 	desired := reconciler.Reconcile()
 	response.Attachments = append(response.Attachments, desired)
 
-	glog.V(2).Infof(
-		"Sync 'Namespace' %q was successful: %s",
-		request.Watch.GetName(), metac.GetDetailsFromResponse(response),
+	log.V(2).Info(
+		"Sync completed",
+		"namespace", request.Watch.GetName(),
+		"response", metac.GetDetailsFromResponse(response),
 	)
 
 	return nil
@@ -137,9 +168,11 @@ func (c Percentage) String() string {
 
 // Reconciler enables reconciliation of Namespace
 type Reconciler struct {
+	log                      logr.Logger
+	prom                     *prom.Metrics
 	ObservedPipelineCoverage *unstructured.Unstructured
 
-	metrics *config.MetricsConfig
+	metrics *config.TestCasesMetrics
 
 	// actual & valid test case names
 	validTests []string
@@ -152,10 +185,18 @@ type Reconciler struct {
 	err      error
 }
 
+type ReconcilerConfig struct {
+	Log                      logr.Logger
+	Prom                     *prom.Metrics
+	ObservedPipelineCoverage *unstructured.Unstructured
+}
+
 // NewReconciler returns a new instance of reconciler
-func NewReconciler(pipelineCoverage *unstructured.Unstructured) *Reconciler {
+func NewReconciler(conf ReconcilerConfig) *Reconciler {
 	return &Reconciler{
-		ObservedPipelineCoverage: pipelineCoverage,
+		log:                      conf.Log,
+		prom:                     conf.Prom,
+		ObservedPipelineCoverage: conf.ObservedPipelineCoverage,
 	}
 }
 
@@ -227,7 +268,8 @@ func (r *Reconciler) calculateCoverage() {
 		return
 	}
 
-	glog.V(2).Infof("Coverage calc = %d/%d*100", validTestCount, desiredTestCount)
+	calc := fmt.Sprintf("%d/%d*100", validTestCount, desiredTestCount)
+	r.log.V(2).Info("Coverage calculation", "formula", calc)
 	actual := float32(validTestCount)
 	desired := float32(desiredTestCount)
 	r.coverage = actual / desired
@@ -236,13 +278,25 @@ func (r *Reconciler) calculateCoverage() {
 // loadConfigOrEmpty loads the config or empty if config
 // is not found
 func (r *Reconciler) loadConfigOrEmpty() {
-	c := config.New("/etc/config/e2e-metrics/")
+	c := config.New(config.LoadableConfig{
+		Path: "/etc/config/e2e-metrics/",
+		Log:  r.log,
+		Prom: r.prom,
+	})
 	r.metrics, r.err = c.LoadOrEmpty()
 }
 
 // Reconcile observed state of CStorClusterPlan to its desired
 // state
 func (r *Reconciler) Reconcile() *unstructured.Unstructured {
+	defer func() {
+		r.prom.IncrementControllerSyncCount(&prom.Controller{
+			Name:  "pipeline-coverage-controller",
+			Type:  prom.ControllerTypeSync,
+			Error: r.err,
+		})
+	}()
+
 	var fns = []func(){
 		r.loadConfigOrEmpty,
 		r.calculateCoverage,
@@ -251,7 +305,7 @@ func (r *Reconciler) Reconcile() *unstructured.Unstructured {
 		fn()
 		if r.err != nil {
 			// we log & stop executing remaining functions
-			glog.Errorf("Reconcile failed: %+v", r.err)
+			r.log.Error(r.err, "failed to reconcile")
 			break
 		}
 	}

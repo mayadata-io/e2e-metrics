@@ -1,0 +1,37 @@
+# Grafana server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      name: grafana
+  template:
+    metadata:
+      labels:
+        name: grafana
+    spec:
+      serviceAccountName: prom-grafana
+      containers:
+        - image: grafana/grafana
+          name: grafana
+          ports:
+            - containerPort: 3000
+              name: ui
+---
+# Grafana UI Service NodePort
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: grafana
+  name: grafana
+spec:
+  ports:
+    - name: grafana-ui
+      port: 3000
+      targetPort: ui
+  selector:
+    name: grafana
+  type: NodePort

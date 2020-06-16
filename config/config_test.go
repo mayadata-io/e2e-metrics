@@ -18,6 +18,9 @@ package config
 
 import (
 	"testing"
+
+	"mayadata.io/e2e-metrics/metrics"
+	logstesting "mayadata.io/e2e-metrics/pkg/logs/testing"
 )
 
 func TestConfigLoad(t *testing.T) {
@@ -35,7 +38,15 @@ func TestConfigLoad(t *testing.T) {
 		"tcid-DIR-HEALTH-CHECK",
 	}
 
-	config := New("testdata/")
+	log := &logstesting.TestLogger{
+		T: t,
+	}
+	prom := metrics.New(log)
+	config := New(LoadableConfig{
+		Path: "testdata/",
+		Log:  log,
+		Prom: prom,
+	})
 	metrics, err := config.Load()
 	if err != nil {
 		t.Fatalf("Expected no error: Got %v", err)

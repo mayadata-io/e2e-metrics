@@ -23,8 +23,12 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+
 	"mayadata.io/e2e-metrics/config"
+	"mayadata.io/e2e-metrics/metrics"
+	logstesting "mayadata.io/e2e-metrics/pkg/logs/testing"
 	"mayadata.io/e2e-metrics/types"
+
 	"openebs.io/metac/controller/generic"
 )
 
@@ -91,7 +95,15 @@ func TestSync(t *testing.T) {
 		name := name
 		mock := mock
 		t.Run(name, func(t *testing.T) {
-			err := Sync(mock.request, mock.response)
+			log := &logstesting.TestLogger{
+				T: t,
+			}
+			prom := metrics.New(log)
+			s := NewSyncer(
+				log,
+				prom,
+			)
+			err := s.Sync(mock.request, mock.response)
 			if mock.isErr && err == nil {
 				t.Fatalf("Expected error got none")
 			}
@@ -190,92 +202,94 @@ func TestPercentageString(t *testing.T) {
 
 func TestReconcilerCalculateCoverage(t *testing.T) {
 	var tests = map[string]struct {
-		reconciler  *Reconciler
+		//reconciler  *Reconciler
+		metrics     *config.TestCasesMetrics
 		expect      float64
 		expectWarns int
 	}{
 		"0/0 coverage": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{},
-			},
+			// reconciler: &Reconciler{
+			// 	prom: &config.MetricsConfig{},
+			// },
+			metrics:     &config.TestCasesMetrics{},
 			expect:      0,
 			expectWarns: 1,
 		},
 		"1/2 coverage": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{
-					ActualTestCases: map[string]bool{
-						"101": true,
-					},
-					DesiredTestCases: map[string]bool{
-						"101": true,
-						"201": true,
-					},
+			//reconciler: &Reconciler{
+			metrics: &config.TestCasesMetrics{
+				ActualTestCases: map[string]bool{
+					"101": true,
+				},
+				DesiredTestCases: map[string]bool{
+					"101": true,
+					"201": true,
 				},
 			},
+			//},
 			expect: .5,
 		},
 		"1/3 coverage": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{
-					ActualTestCases: map[string]bool{
-						"101": true,
-					},
-					DesiredTestCases: map[string]bool{
-						"101": true,
-						"201": true,
-						"301": true,
-					},
+			//reconciler: &Reconciler{
+			metrics: &config.TestCasesMetrics{
+				ActualTestCases: map[string]bool{
+					"101": true,
+				},
+				DesiredTestCases: map[string]bool{
+					"101": true,
+					"201": true,
+					"301": true,
 				},
 			},
+			//},
 			expect: .33,
 		},
 		"2/2 coverage": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{
-					ActualTestCases: map[string]bool{
-						"101": true,
-						"201": true,
-					},
-					DesiredTestCases: map[string]bool{
-						"101": true,
-						"201": true,
-					},
+			//reconciler: &Reconciler{
+			metrics: &config.TestCasesMetrics{
+				ActualTestCases: map[string]bool{
+					"101": true,
+					"201": true,
+				},
+				DesiredTestCases: map[string]bool{
+					"101": true,
+					"201": true,
 				},
 			},
+			//},
 			expect: 1,
 		},
 		"1/2 coverage - actuals != desired": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{
-					ActualTestCases: map[string]bool{
-						"101": true,
-						"301": true, // not registered in desired
-					},
-					DesiredTestCases: map[string]bool{
-						"101": true,
-						"201": true,
-					},
+			//reconciler: &Reconciler{
+			metrics: &config.TestCasesMetrics{
+				ActualTestCases: map[string]bool{
+					"101": true,
+					"301": true, // not registered in desired
+				},
+				DesiredTestCases: map[string]bool{
+					"101": true,
+					"201": true,
 				},
 			},
+			//},
 			expect:      .5,
 			expectWarns: 1,
 		},
 		"1/3 coverage - actuals != desired": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{
-					ActualTestCases: map[string]bool{
-						"101": true,
-						"401": true, // not registered in desired
-						"501": true, // not registered in desired
-					},
-					DesiredTestCases: map[string]bool{
-						"101": true,
-						"201": true,
-						"301": true,
-					},
+			//reconciler: &Reconciler{
+			metrics: &config.TestCasesMetrics{
+				ActualTestCases: map[string]bool{
+					"101": true,
+					"401": true, // not registered in desired
+					"501": true, // not registered in desired
+				},
+				DesiredTestCases: map[string]bool{
+					"101": true,
+					"201": true,
+					"301": true,
 				},
 			},
+			//},
 			expect:      .33,
 			expectWarns: 1,
 		},
@@ -284,14 +298,18 @@ func TestReconcilerCalculateCoverage(t *testing.T) {
 		name := name
 		mock := mock
 		t.Run(name, func(t *testing.T) {
-			mock.reconciler.calculateCoverage()
-			got := float64(mock.reconciler.coverage)
+			r := NewReconciler(ReconcilerConfig{
+				Log: logstesting.TestLogger{T: t},
+			})
+			r.metrics = mock.metrics
+			r.calculateCoverage()
+			got := float64(r.coverage)
 			if math.Round(got) != math.Round(mock.expect) {
 				t.Fatalf("Expected %f got %f", mock.expect, got)
 			}
-			if mock.expectWarns != len(mock.reconciler.warnings) {
+			if mock.expectWarns != len(r.warnings) {
 				t.Fatalf("Expected warns %d got %d",
-					mock.expectWarns, len(mock.reconciler.warnings),
+					mock.expectWarns, len(r.warnings),
 				)
 			}
 		})
@@ -300,13 +318,11 @@ func TestReconcilerCalculateCoverage(t *testing.T) {
 
 func TestReconcilerReconcile(t *testing.T) {
 	var tests = map[string]struct {
-		reconciler *Reconciler
-		expect     *unstructured.Unstructured
+		metrics *config.TestCasesMetrics
+		expect  *unstructured.Unstructured
 	}{
 		"empty metrics": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{},
-			},
+			metrics: &config.TestCasesMetrics{},
 			expect: &unstructured.Unstructured{
 				Object: map[string]interface{}{
 					"apiVersion": string(types.E2EMetricsMayadataV1Alpha1),
@@ -341,7 +357,14 @@ func TestReconcilerReconcile(t *testing.T) {
 		name := name
 		mock := mock
 		t.Run(name, func(t *testing.T) {
-			got := mock.reconciler.Reconcile()
+			log := logstesting.TestLogger{T: t}
+			prom := metrics.New(log)
+			r := NewReconciler(ReconcilerConfig{
+				Log:  log,
+				Prom: prom,
+			})
+			r.metrics = mock.metrics
+			got := r.Reconcile()
 			if !reflect.DeepEqual(got, mock.expect) {
 				t.Fatalf("Expected no diff got\n%s", cmp.Diff(mock.expect, got))
 			}
@@ -351,13 +374,11 @@ func TestReconcilerReconcile(t *testing.T) {
 
 func TestReconcilerGetDesiredPipelineCoverage(t *testing.T) {
 	var tests = map[string]struct {
-		reconciler *Reconciler
-		expect     *unstructured.Unstructured
+		metrics *config.TestCasesMetrics
+		expect  *unstructured.Unstructured
 	}{
 		"empty metrics": {
-			reconciler: &Reconciler{
-				metrics: &config.MetricsConfig{},
-			},
+			metrics: &config.TestCasesMetrics{},
 			expect: &unstructured.Unstructured{
 				Object: map[string]interface{}{
 					"apiVersion": string(types.E2EMetricsMayadataV1Alpha1),
@@ -392,7 +413,11 @@ func TestReconcilerGetDesiredPipelineCoverage(t *testing.T) {
 		name := name
 		mock := mock
 		t.Run(name, func(t *testing.T) {
-			got := mock.reconciler.getDesiredPipelineCoverage()
+			r := NewReconciler(ReconcilerConfig{
+				Log: logstesting.TestLogger{T: t},
+			})
+			r.metrics = mock.metrics
+			got := r.getDesiredPipelineCoverage()
 			if !reflect.DeepEqual(got, mock.expect) {
 				t.Fatalf("Expected no diff got\n%s", cmp.Diff(mock.expect, got))
 			}
